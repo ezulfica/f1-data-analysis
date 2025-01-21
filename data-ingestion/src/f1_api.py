@@ -113,7 +113,38 @@ class F1API() :
           if response.status_code == 200 : 
                data = response.json()
                return (filename, data)
+          
 
 
-f1_api = F1API()
+# -- ASYNC TEST --           
+# MAX_CONCURRENT_REQUESTS = 1
+# semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
 
+# async def fetch_f1_season_info(session, offset):
+
+#     """Query the API to get all the race year and round
+#     using the offset parameters with async method"""
+
+#     url = f'{base_url}/?offset={offset}&limit=100'
+#     try:
+#         await asyncio.sleep(10)  # Simulating delay without blocking
+#         async with session.get(url, timeout=10) as response:
+#             response.raise_for_status()  # Raises an HTTP error for bad responses (4xx or 5xx)
+#             data = await response.json()
+#             return data["MRData"]["RaceTable"]["Races"]
+        
+#     except ClientError as e:
+#         print(f"Network error occurred for offset {offset}: {e}")
+#     except asyncio.TimeoutError:
+#         print(f"Request timed out for offset {offset}")
+#     except KeyError:
+#         print(f"Unexpected response format for offset {offset}")
+#     except Exception as e:
+#         print(f"An unexpected error occurred for offset {offset}: {e}")
+#     return []  # Return an empty list if there's an error
+
+# async def f1_seasons(offsets : list) : 
+#     async with aiohttp.ClientSession() as session:
+#         tasks = [fetch_f1_season_info(session, offset) for offset in offsets]
+#         results = await asyncio.gather(*tasks)
+#         return results
