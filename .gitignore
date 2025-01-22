@@ -1,3 +1,6 @@
 .venv
 config/*
 .vsocde/settings.json
+data_ingestion/src/__pycache__/*
+aws_connect/__pycache__/*
+data_ingestion/__pycache__/*

@@ -13,7 +13,12 @@ class F1API() :
         self.season_category = self.settings["f1_api"]["season_category"]
         self.round_category = self.settings["f1_api"]["round_category"]
         self.f1_schedule = None
+        self.pending_races = None
+        self.f1_seasons_results = None
+        self.f1_races_data = None 
+        self.folder_name = None
 
+    # ---- F1 SCHEDULE ---- 
     def get_pagination_offsets(self) -> list :
         """In order to get all the value from the API, 
         the offset parameters is used. 
@@ -53,7 +58,8 @@ class F1API() :
         f1_list = [self.fetch_circuit_schedule(offset) for offset in self.offsets]
         unflatted_races = [race for races in f1_list for race in races] 
         self.f1_schedule = unflatted_races
-    
+
+    # ---- F1 RACE DATA ---- 
     def base_url_race_data(self ,category, season, race_round) :
         """endpoint url for pits and laps data"""
         return f'{self.base_url}{season}/{race_round}/{category}'  
@@ -62,7 +68,7 @@ class F1API() :
         """
         results = ["laps", "pitstop"]
         """
-        seasons_and_rounds = [(fone['season'], fone['round']) for fone in self.f1_schedule]
+        seasons_and_rounds = [(fone['season'], fone['round']) for fone in self.pending_races]
         
         combinations = [(season, rounds, category) 
                         for (season, rounds) in seasons_and_rounds for category in self.round_category
@@ -73,7 +79,26 @@ class F1API() :
                       ]
         
         return result_url  
+
+    def build_race_data(self, params) :
+        url =  params[-1]
+        season = params[1]
+        race_round = params[2]
+        category = params[0]
+        filename = f'{self.folder_name}/{category}/{season}_{race_round}_{category}.json' 
     
+        with requests.get(url) as response : 
+            if response.status_code == 200 : 
+                data = response.json()
+                return (filename, data)
+
+    def fetch_races_data(self) : 
+        params = self.build_url_race_data()
+        data = [self.build_race_data(param) for param in params]
+        self.f1_races_data = data
+
+    # ---- F1 SEASON RESULTS ---- 
+
     def base_url_season_result(self, category, season) :
         """endpoint url for results, sprint, qualifying data"""
         return f'{self.base_url}{season}/{category}'
@@ -82,38 +107,28 @@ class F1API() :
      """
      results = ["results", "qualifying", "sprint"]
      """
-     seasons = set([(fone['season']) for fone in self.f1_schedule])
+     seasons = set([(fone['season']) for fone in self.pending_races])
      combinations = [(season, category) for season in set(seasons) for category in self.season_category]
      results_url = [(category, season, self.base_url_season_result(category, season)) for season, category in combinations]
      return results_url
-    
-    def fetch_races_data(self) :
-        params = self.build_url_race_data(self)
-        url =  params[-1]
-        season = params[1]
-        race_round = params[2]
-        category = params[0]
-        filename = f'raw/{category}/{season}_{race_round}_{category}.json' 
-    
-        with requests.get(url) as response : 
-            if response.status_code == 200 : 
-                data = response.json()
-                return (filename, data)
-            
-    def fetch_races_results(self) :
-     params = self.build_url_season_result(self)
 
+    def build_races_results(self, params) :
      url =  params[-1]
      season = params[-2]
      category = params[0]
 
-     filename = f'raw/{category}/{season}_{category}.json' 
+     filename = f'{self.folder_name}/{category}/{season}_{category}.json' 
 
      with requests.get(url) as response : 
           if response.status_code == 200 : 
                data = response.json()
                return (filename, data)
-          
+    
+    def fetch_seasons_results(self) : 
+        params = self.build_url_season_result()
+        data = [self.build_races_results(param) for param in params]
+        self.f1_seasons_results = data
+
 
 
 # -- ASYNC TEST --           

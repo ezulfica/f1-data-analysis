@@ -1,6 +1,6 @@
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
-
+import json
 class S3Client():
 
     def __init__(self, aws_access_key_id: str =None, aws_secret_access_key: str =None, region_name: str =None):
@@ -43,7 +43,7 @@ class S3Client():
             return response['Body'].read()
         except Exception as e:
             print(f"Error reading object {object_key} from bucket {bucket_name}: {e}")
-            return None
+            return None  
 
     def write_object(self, bucket_name, object_key, data):
         """
