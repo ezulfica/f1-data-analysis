@@ -86,7 +86,8 @@ class F1API() :
         race_round = params[2]
         category = params[0]
         filename = f'{self.folder_name}/{category}/{season}_{race_round}_{category}.json' 
-    
+
+        sleep(0.5)
         with requests.get(url) as response : 
             if response.status_code == 200 : 
                 data = response.json()
@@ -118,7 +119,8 @@ class F1API() :
      category = params[0]
 
      filename = f'{self.folder_name}/{category}/{season}_{category}.json' 
-
+     
+     sleep(0.5)
      with requests.get(url) as response : 
           if response.status_code == 200 : 
                data = response.json()
