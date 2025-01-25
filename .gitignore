@@ -5,3 +5,5 @@ data_ingestion/src/__pycache__/*
 aws_connect/__pycache__/*
 data_ingestion/__pycache__/*
 data_ingestion/utils/__pycache__/*
+utils/__pycache__/*
+data_prep/src/__pycache__/*

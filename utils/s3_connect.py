@@ -1,9 +1,10 @@
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
-import json
+
 class S3Client():
 
-    def __init__(self, aws_access_key_id: str =None, aws_secret_access_key: str =None, region_name: str =None):
+    def __init__(self, aws_access_key_id: str =None, aws_secret_access_key: str =None, region_name: str =None, bucket_name : str=None):
+        
         """
         Initialize the S3 client.
         :param aws_access_key_id: AWS access key ID
@@ -14,6 +15,7 @@ class S3Client():
         self.aws_secret_access_key = aws_secret_access_key
         self.region_name = region_name
         self.s3_client = None
+        self.bucket_name = bucket_name
 
     def connect(self):
         """
@@ -31,7 +33,7 @@ class S3Client():
             print(f"Error connecting to S3: {e}")
             raise
 
-    def read_object(self, bucket_name, object_key):
+    def read_object(self, object_key):
         """
         Read an object from S3.
         :param bucket_name: Name of the S3 bucket
@@ -39,13 +41,13 @@ class S3Client():
         :return: Object content as bytes
         """
         try:
-            response = self.s3_client.get_object(Bucket=bucket_name, Key=object_key)
+            response = self.s3_client.get_object(Bucket=self.bucket_name, Key=object_key)
             return response['Body'].read()
         except Exception as e:
-            print(f"Error reading object {object_key} from bucket {bucket_name}: {e}")
+            print(f"Error reading object {object_key} from bucket {self.bucket_name}: {e}")
             return None  
 
-    def write_object(self, bucket_name, object_key, data):
+    def write_object(self, object_key, data):
         """
         Write an object to S3.
         :param bucket_name: Name of the S3 bucket
@@ -55,7 +57,24 @@ class S3Client():
         try:
             if isinstance(data, str):
                 data = data.encode('utf-8')
-            self.s3_client.put_object(Bucket=bucket_name, Key=object_key, Body=data)
-            print(f"Successfully uploaded {object_key} to {bucket_name}.")
+            self.s3_client.put_object(Bucket=self.bucket_name, Key=object_key, Body=data)
+            print(f"Successfully uploaded {object_key} to {self.bucket_name}.")
         except Exception as e:
-            print(f"Error writing object {object_key} to bucket {bucket_name}: {e}")
+            print(f"Error writing object {object_key} to bucket {self.bucket_name}: {e}")
+
+    def list_objects(self):
+        """
+        List all objects in an S3 bucket.
+        :param bucket_name: Name of the S3 bucket
+        :return: List of object keys
+        """
+        try:
+            response = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
+            if 'Contents' in response:
+                return [obj['Key'] for obj in response['Contents']]
+            else:
+                print("Bucket is empty.")
+                return []
+        except Exception as e:
+            print(f"Error listing objects in bucket {self.bucket_name}: {e}")
+            return []

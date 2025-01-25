@@ -16,7 +16,7 @@ class F1API() :
         self.pending_races = None
         self.f1_seasons_results = None
         self.f1_races_data = None 
-        self.folder_name = None
+        self.folder_name = "raw"
 
     # ---- F1 SCHEDULE ---- 
     def get_pagination_offsets(self) -> list :

@@ -3,8 +3,8 @@ from datetime import date, timedelta
 import json
 
 from data_ingestion.src.f1_api import F1API
-from aws_connect.s3_connect import S3Client
-from data_ingestion.utils.s3_utils import read_object_into_json
+from utils.s3_connect import S3Client
+from utils.s3_utils import read_object_into_json
 
 
 def get_last_date(f1_schedule : list) : 
@@ -13,7 +13,7 @@ def get_last_date(f1_schedule : list) :
 
 def fetch_f1_schedule(s3_client : S3Client, config : dict, f1_api : F1API):
     """Retrieve the F1 schedule from S3 or update it if outdated."""
-    s3_f1_schedule_file = f'{config["s3_prefix_folder"]}/f1_schedule.json'
+    s3_f1_schedule_file = f'{f1_api.folder_name}/f1_schedule.json'
     
     f1_schedule = read_object_into_json(
         s3_client, 
@@ -46,8 +46,6 @@ def process_race_data(f1_api : F1API, config : dict, LOOKBACK_DAYS : int):
         race for race in f1_api.f1_schedule
         if date_range_start <= race['date'] <= date_range_end
     ]
-
-    f1_api.folder_name = config["s3_prefix_folder"]
 
     logging.info("Fetching race data...")
     f1_api.fetch_races_data()

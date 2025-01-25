@@ -1,7 +1,7 @@
 import logging
 from data_ingestion.src.f1_api import F1API
-from data_ingestion.utils.config_utils import load_config
-from data_ingestion.utils.s3_utils import connect_s3, upload_results
+from utils.config_utils import load_config
+from utils.s3_utils import connect_s3, upload_results
 from data_ingestion.utils.func_utils import fetch_f1_schedule, process_race_data
 
 # Set up logging
