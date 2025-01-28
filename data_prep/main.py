@@ -8,17 +8,15 @@ CONFIG_PATH = "config/.env"
 
 
 def main() : 
-    settings = load_settings(SETTINGS_PATH)
     config = load_config(CONFIG_PATH)
     s3_client = connect_s3(config)
-    s3_files = s3_client.list_objects()
-    season_category = settings["f1_api"]["season_category"]
-    #round_category = settings["f1_api"]["round_category"]
-    season_category_files = build_object_list_to_query(season_category, s3_files)
-    data_loading_concurrency(s3_client, files=season_category_files)
-
+    s3_files = s3_client.list_objects(prefix="raw/")
+    last_upload = max([file for file in s3_files if "raw/" in file and ".txt" in file])
+    file_to_prep = s3_client.read_object(last_upload).decode().split("\n")
+    data_loading_concurrency(s3_client=s3_client, files = file_to_prep)
 
 if __name__ == "__main__":
     main()
 
-
+file_to_prep = s3_client.read_object(last_upload).decode().split("\n")
+file_to_prep = [file for file in file_to_prep if "2024" in file]

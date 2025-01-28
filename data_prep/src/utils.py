@@ -6,10 +6,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from utils.s3_connect import S3Client
 from utils.s3_utils import read_object_into_table 
 
-def build_object_list_to_query(categories : list, s3_files : list) -> None : 
-    files = [file for file in s3_files for category in categories if "raw/"+category in file]
-    return files
-
 def data_loading_concurrency(s3_client: S3Client, files : list) :
 
     num_files = len(files)
@@ -25,10 +21,13 @@ def data_loading_concurrency(s3_client: S3Client, files : list) :
     return "Completed !" 
 
 def prep_data_into_s3(s3_client : S3Client, object_key : str) -> None : 
-    dt, filename = read_object_into_table(s3_client, object_key)
-    filename = filename.replace("raw", "prep").replace("json", "parquet")
-    dt = recursive_unnest_explode(df = dt, parent_prefix= "")
-    load_data_to_s3_as_parquet(df = dt, s3_client = s3_client, filename=filename)
+    try : 
+        dt, filename = read_object_into_table(s3_client, object_key)
+        filename = filename.replace("raw", "prep").replace("json", "parquet")
+        dt = recursive_unnest_explode(df = dt, parent_prefix= "")
+        load_data_to_s3_as_parquet(df = dt, s3_client = s3_client, filename=filename)
+    except : 
+        None
 
 def recursive_unnest_explode(df: pl.DataFrame, parent_prefix="") -> pl.DataFrame:
     

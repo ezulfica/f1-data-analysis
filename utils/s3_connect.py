@@ -58,23 +58,48 @@ class S3Client():
             if isinstance(data, str):
                 data = data.encode('utf-8')
             self.s3_client.put_object(Bucket=self.bucket_name, Key=object_key, Body=data)
-            print(f"Successfully uploaded {object_key} to {self.bucket_name}.")
+            #print(f"Successfully uploaded {object_key} to {self.bucket_name}.")
         except Exception as e:
             print(f"Error writing object {object_key} to bucket {self.bucket_name}: {e}")
 
-    def list_objects(self):
+    def list_objects(self, prefix: str) -> None:
+
         """
-        List all objects in an S3 bucket.
-        :param bucket_name: Name of the S3 bucket
+        List all objects in an S3 bucket with the given prefix using pagination.
+
+        :param prefix: Prefix of the S3 objects to list
         :return: List of object keys
         """
         try:
-            response = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
-            if 'Contents' in response:
-                return [obj['Key'] for obj in response['Contents']]
-            else:
-                print("Bucket is empty.")
+            paginator = self.s3_client.get_paginator('list_objects_v2')
+            object_keys = []
+
+            for page in paginator.paginate(Bucket=self.bucket_name, Prefix=prefix):
+                if 'Contents' in page:
+                    object_keys.extend(obj['Key'] for obj in page['Contents'])
+
+            if not object_keys:
+                print("Bucket is empty or no objects match the prefix.")
                 return []
+
+            return object_keys
+
         except Exception as e:
             print(f"Error listing objects in bucket {self.bucket_name}: {e}")
             return []
+        
+        # """
+        # List all objects in an S3 bucket.
+        # :param bucket_name: Name of the S3 bucket
+        # :return: List of object keys
+        # """
+        # try:
+        #     response = self.s3_client.list_objects_v2(Bucket=self.bucket_name, Prefix = prefix)
+        #     if 'Contents' in response:
+        #         return [obj['Key'] for obj in response['Contents']]
+        #     else:
+        #         print("Bucket is empty.")
+        #         return []
+        # except Exception as e:
+        #     print(f"Error listing objects in bucket {self.bucket_name}: {e}")
+        #     return []

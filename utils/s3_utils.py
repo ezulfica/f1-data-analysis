@@ -1,9 +1,12 @@
 import json
 import logging
 import polars as pl
-
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
+from datetime import date
 from utils.s3_connect import S3Client
 from data_ingestion.src.f1_api import F1API
+from utils.config_utils import get_all_file_paths
 
 
 def connect_s3(config) -> S3Client:
@@ -23,13 +26,29 @@ def read_object_into_json(s3_client: S3Client, object_key : str) -> None:
 
 def read_object_into_table(s3_client : S3Client, object_key : str) -> tuple : 
     data = read_object_into_json(s3_client,object_key)
-    dt = pl.DataFrame(data["MRData"]["RaceTable"]["Races"])
+    dt = pl.concat([pl.DataFrame(dt["MRData"]["RaceTable"]["Races"]) for dt in data])
     if dt.shape != (0,0) : 
         return dt, object_key
 
-def upload_results(s3_client : S3Client, f1_api : F1API):
+def upload_file(s3_client : S3Client, filename : str):
     """Upload F1 results to S3."""
-    for result in f1_api.f1_seasons_results + f1_api.f1_races_data:
-        filename, data = result
-        logging.info(f"Uploading {filename} to S3...")
-        s3_client.write_object(object_key=filename, data=data)
+    
+    with open(filename, "r") as file : 
+        data = json.dumps(json.load(file))
+
+    #logging.info(f"Uploading {filename} to S3...")
+    s3_client.write_object(object_key=filename, data=data)
+        
+def upload_results(s3_client: S3Client, foldername: str) -> None : 
+    filelist = get_all_file_paths(foldername)
+
+    txt = "\n".join(filelist)
+    today_date = date.today().strftime("%Y-%m-%d")
+    uploaded_file = f'{foldername}/uploaded_file/{today_date}_uploaded_file.txt'
+    s3_client.write_object(object_key=uploaded_file, data=txt)
+
+    with ThreadPoolExecutor(max_workers=3) as executor : 
+        uploaded_file = [
+            executor.submit(upload_file(s3_client, filename)) for filename in filelist
+            ]
+    logging.info("Files uploaded in S3!")
