@@ -24,11 +24,6 @@ def read_object_into_json(s3_client: S3Client, object_key : str) -> None:
     obj = s3_client.read_object(object_key)
     return json.loads(obj)
 
-def read_object_into_table(s3_client : S3Client, object_key : str) -> tuple : 
-    data = read_object_into_json(s3_client,object_key)
-    dt = pl.concat([pl.DataFrame(dt["MRData"]["RaceTable"]["Races"]) for dt in data])
-    if dt.shape != (0,0) : 
-        return dt, object_key
 
 def upload_file(s3_client : S3Client, filename : str):
     """Upload F1 results to S3."""

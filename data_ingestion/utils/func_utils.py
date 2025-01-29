@@ -50,9 +50,9 @@ def process_race_data(f1_api : F1API, config : dict, LOOKBACK_DAYS : int, get_al
     else :  
         f1_api.pending_races = f1_api.f1_schedule
 
-    # logging.info("Fetching race results...")
-    # f1_api.fetch_seasons_results()
-    # sleep(2)
+    logging.info("Fetching race results...")
+    f1_api.fetch_seasons_results()
+    sleep(2)
     logging.info("Fetching race data...")
     f1_api.fetch_races_data()
     

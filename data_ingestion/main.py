@@ -23,7 +23,7 @@ def main():
     f1_api = F1API()
     fetch_f1_schedule(s3_client, config, f1_api)
     process_race_data(f1_api, config, LOOKBACK_DAYS, get_all=True)
-    upload_results(s3_client, f1_api.folder_name)
+    #upload_results(s3_client, f1_api.folder_name)
 
 if __name__ == "__main__":
     main()

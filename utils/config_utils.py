@@ -25,6 +25,5 @@ def get_all_file_paths(directory):
     return file_paths
 
 # Example usage
-
 all_files = get_all_file_paths("raw/")
 
