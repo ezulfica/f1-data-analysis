@@ -133,6 +133,9 @@ def load_data_to_s3_as_parquet(df: pl.DataFrame, s3_client : S3Client, filename 
     try :  
         buffer = BytesIO()
         df.write_parquet(file = buffer, compression="gzip")
+        folder = "/".join(filename.split("/")[:-1])
+        Path(folder).mkdir(parents=True, exist_ok=True)
+        df.write_parquet(filename, compression="gzip") #get a copy in local for the loading part in the database
         s3_client.write_object(object_key= filename, data=buffer.getvalue())
         print(f"Successfully uploaded {filename} to {s3_client.bucket_name}.")
         Path(old_filename).unlink()

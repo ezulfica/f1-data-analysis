@@ -1,13 +1,9 @@
 import json
 import logging
-import polars as pl
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from tqdm import tqdm
-from datetime import date
+from concurrent.futures import ThreadPoolExecutor
 from utils.s3_connect import S3Client
-from data_ingestion.src.f1_api import F1API
 from utils.config_utils import get_all_file_paths
-
+from pathlib import Path
 
 def connect_s3(config) -> S3Client:
     """Establish a connection to AWS S3."""
@@ -27,6 +23,9 @@ def read_object_into_json(s3_client: S3Client, object_key : str) -> None:
 
 def upload_file(s3_client : S3Client, filename : str):
     """Upload F1 results to S3."""
+
+    folder = "/".join(filename.split("/")[:-1])
+    Path(folder).mkdir(parents=True, exist_ok=True)
     
     with open(filename, "r") as file : 
         data = json.dumps(json.load(file))
@@ -38,8 +37,6 @@ def upload_results(s3_client: S3Client, foldername: str) -> None :
     filelist = get_all_file_paths(foldername)
 
     txt = "\n".join(filelist)
-    today_date = date.today().strftime("%Y-%m-%d")
-    uploaded_file = f'{foldername}/uploaded_file/{today_date}_uploaded_file.txt'
     s3_client.write_object(object_key=uploaded_file, data=txt)
 
     with ThreadPoolExecutor(max_workers=3) as executor : 
