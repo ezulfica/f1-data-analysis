@@ -35,7 +35,7 @@ def fetch_f1_schedule(s3_client:S3Client, config:dict, f1_api:F1API):
         logging.info("Using existing F1 schedule.")
         f1_api.f1_schedule = f1_schedule
 
-def process_race_data(f1_api : F1API, config : dict, LOOKBACK_DAYS : int, get_all: bool):
+def process_race_data(f1_api : F1API, LOOKBACK_DAYS : int, get_all: bool):
     """Process and fetch race data."""
     
     if get_all == False : 

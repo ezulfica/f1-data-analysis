@@ -8,7 +8,7 @@ from utils.s3_connect import S3Client
 
 def file_to_prep(directory: str) : 
     path_ =  list(Path(directory).rglob("*"))
-    return [str(filename) for filename in path_ if '.json' in str(filename)]
+    return [str(filename) for filename in path_ if filename.suffix == '.json']
 
 def data_loading_concurrency(s3_client: S3Client, files : list) :
 

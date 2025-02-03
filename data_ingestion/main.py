@@ -1,9 +1,8 @@
 #!/home/eric/Data/F1 Data Analysis/.venv/bin/python
 
 import logging
-import os
+from dotenv import dotenv_values
 from data_ingestion.src.f1_api import F1API  # Absolute import
-from utils.config_utils import load_config
 from utils.s3_utils import connect_s3, upload_results
 from data_ingestion.utils.func_utils import fetch_f1_schedule, process_race_data
 import polars as pl
@@ -18,7 +17,7 @@ LOOKBACK_DAYS = 5
 #main function
 def main():
     """Main execution function."""
-    config = load_config(CONFIG_PATH)
+    config = dotenv_values(CONFIG_PATH)
     s3_client = connect_s3(config)
     f1_api = F1API()
     fetch_f1_schedule(s3_client, config, f1_api)

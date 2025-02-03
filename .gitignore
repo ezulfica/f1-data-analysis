@@ -11,3 +11,6 @@ raw/*
 data_prep/__pycache__/*
 data_prep/utils/__pycache__/*
 prep/*
+prep copy/*
+data_load_into_bigquery/utils/__pycache__/*
+data_load_into_bigquery/__pycache__/*

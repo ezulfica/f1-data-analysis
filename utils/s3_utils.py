@@ -8,8 +8,8 @@ from pathlib import Path
 def connect_s3(config) -> S3Client:
     """Establish a connection to AWS S3."""
     s3_client = S3Client(
-        aws_access_key_id=config["aws_access_key"],
-        aws_secret_access_key=config["aws_secret_key"],
+        aws_access_key_id=config["AWS_ACCESS_KEY"],
+        aws_secret_access_key=config["AWS_ACCESS_KEY"],
         region_name=config["aws_region"],
         bucket_name=config["s3_bucket"]
     )
