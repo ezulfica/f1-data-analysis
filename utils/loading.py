@@ -4,14 +4,14 @@ import polars as pl
 import pandas as pd
 from pathlib import Path
 
-def list_file(directory: str) -> list:
-    path_ = list(Path(directory).rglob("*"))
+def list_file(folder: str) -> list:
+    path_ = list(Path(folder).rglob("*"))
     parquet_files = [filename for filename in path_ if filename.suffix == ".parquet"]
     return parquet_files
 
-def file_to_load(directory: str) -> dict:
+def file_to_load(folder: str) -> dict:
     # Get all files in directory recursively
-    parquet_files = list_file(directory)
+    parquet_files = list_file(folder)
     foldernames = set([filename.parent.name for filename in parquet_files])
 
     files_list = {
@@ -50,7 +50,7 @@ def convert_pandas_df(df: pd.DataFrame, schema_json: dict) -> pd.DataFrame:
 
 # === Load and Transform Data ===
 def load_and_transform_data(folder: str, schema_json: dict) -> dict:
-    datasets = load_and_concat("prep")  # Load data
+    datasets = load_and_concat(folder)  # Load data
     transformed_datasets = {}
 
     for table, df in datasets.items():
@@ -80,6 +80,8 @@ def load_into_bigquery(data: pd.DataFrame, project: str, dataset: str, schema_js
             load_job = bq_client.load_table_from_dataframe(df, table_id, job_config=job_config)
             load_job.result()  # Wait for completion
             print(f"Successfully loaded {table} into BigQuery ✅")
-            [file.unlink() for file in list_file(f"prep/{table}")] #delete the files after loading
         except Exception as e:
             print(f"Error loading {table} into BigQuery ❌: {e}")
+
+def delete_local_files(folder: str) : 
+    return [file.unlink() for file in list_file(folder)] #delete the files after loading
