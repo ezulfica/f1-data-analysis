@@ -51,6 +51,8 @@ def convert_pandas_df(df: pd.DataFrame, schema_json: dict) -> pd.DataFrame:
 # === Load and Transform Data ===
 def load_and_transform_data(folder: str, schema_json: dict) -> dict:
     datasets = load_and_concat(folder)  # Load data
+
+    datasets["schedule"] = datasets.pop(folder)
     transformed_datasets = {}
 
     for table, df in datasets.items():
