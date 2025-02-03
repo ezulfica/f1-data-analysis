@@ -1,11 +1,8 @@
-#!/home/eric/Data/F1 Data Analysis/.venv/bin/python
-
 import logging
 from dotenv import dotenv_values
 from data_ingestion.src.f1_api import F1API  # Absolute import
 from utils.s3_utils import connect_s3, upload_results
-from data_ingestion.utils.func_utils import fetch_f1_schedule, process_race_data
-import polars as pl
+from utils.ingestion import fetch_f1_schedule, process_race_data
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

@@ -3,7 +3,7 @@ from datetime import date, timedelta
 import json
 from time import sleep
 from data_ingestion.src.f1_api import F1API
-from utils.s3_connect import S3Client
+from utils.s3_client import S3Client
 from utils.s3_utils import read_object_into_json
 
 

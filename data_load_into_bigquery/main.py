@@ -1,6 +1,6 @@
 from google.cloud import bigquery
 from dotenv import dotenv_values
-from data_load_into_bigquery.utils.utils import load_and_transform_data, load_into_bigquery
+from utils.loading import load_and_transform_data, load_into_bigquery
 import json 
 
 # === CONFIGURATION ===

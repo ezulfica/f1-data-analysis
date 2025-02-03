@@ -1,15 +1,15 @@
 import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from utils.s3_connect import S3Client
-from utils.config_utils import get_all_file_paths
+from utils.s3_client import S3Client
+from utils.config import get_all_file_paths
 from pathlib import Path
 
 def connect_s3(config) -> S3Client:
     """Establish a connection to AWS S3."""
     s3_client = S3Client(
         aws_access_key_id=config["AWS_ACCESS_KEY"],
-        aws_secret_access_key=config["AWS_ACCESS_KEY"],
+        aws_secret_access_key=config["AWS_SECRET_KEY"],
         region_name=config["aws_region"],
         bucket_name=config["s3_bucket"]
     )

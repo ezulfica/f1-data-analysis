@@ -1,7 +1,6 @@
 from utils.s3_utils import connect_s3
 from dotenv import dotenv_values
-from data_prep.utils.utils import data_loading_concurrency
-from data_prep.utils.utils import file_to_prep
+from utils.prep import data_loading_concurrency, file_to_prep
 
 SETTINGS_PATH = "config/settings.yaml"
 CONFIG_PATH = "config/.env"

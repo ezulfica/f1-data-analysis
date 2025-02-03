@@ -1,6 +1,6 @@
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
-
+from botocore.config import Config
 class S3Client():
 
     def __init__(self, aws_access_key_id: str =None, aws_secret_access_key: str =None, region_name: str =None, bucket_name : str=None):
