@@ -4,11 +4,11 @@ from io import BytesIO
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from utils.s3_connect import S3Client
+from utils.s3_client import S3Client
 
 def file_to_prep(directory: str) : 
     path_ =  list(Path(directory).rglob("*"))
-    return [str(filename) for filename in path_ if '.json' in str(filename)]
+    return [str(filename) for filename in path_ if filename.suffix == '.json']
 
 def data_loading_concurrency(s3_client: S3Client, files : list) :
 
@@ -38,9 +38,12 @@ def read_object_into_table(object_key : str) -> tuple :
     with open(object_key, "r") as file :
         data = json.load(file)
     #dt = pl.concat([pl.DataFrame(dt["MRData"]["RaceTable"]["Races"]) for dt in data])
-    dataframes = [pl.DataFrame(dt["MRData"]["RaceTable"]["Races"]) for dt in data]
-    aligned_dataframes = align_nested_structs(dataframes)
-    dt = pl.concat(aligned_dataframes)
+    if "f1_schedule" in object_key : 
+        dt = pl.DataFrame(data)
+    else : 
+        dataframes = [pl.DataFrame(dt["MRData"]["RaceTable"]["Races"]) for dt in data]
+        aligned_dataframes = align_nested_structs(dataframes)
+        dt = pl.concat(aligned_dataframes)
     if dt.shape != (0,0) : 
         return dt, object_key
 
@@ -133,7 +136,10 @@ def load_data_to_s3_as_parquet(df: pl.DataFrame, s3_client : S3Client, filename 
     try :  
         buffer = BytesIO()
         df.write_parquet(file = buffer, compression="gzip")
-        s3_client.write_object(object_key= filename, data=buffer.getvalue())
+        folder = "/".join(filename.split("/")[:-1])
+        Path(folder).mkdir(parents=True, exist_ok=True)
+        df.write_parquet(filename, compression="gzip") #get a copy in local for the loading part in the database
+        #s3_client.write_object(object_key= filename, data=buffer.getvalue())
         print(f"Successfully uploaded {filename} to {s3_client.bucket_name}.")
         Path(old_filename).unlink()
     except Exception as e:

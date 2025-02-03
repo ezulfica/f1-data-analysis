@@ -3,7 +3,7 @@ from datetime import date, timedelta
 import json
 from time import sleep
 from data_ingestion.src.f1_api import F1API
-from utils.s3_connect import S3Client
+from utils.s3_client import S3Client
 from utils.s3_utils import read_object_into_json
 
 
@@ -35,7 +35,7 @@ def fetch_f1_schedule(s3_client:S3Client, config:dict, f1_api:F1API):
         logging.info("Using existing F1 schedule.")
         f1_api.f1_schedule = f1_schedule
 
-def process_race_data(f1_api : F1API, config : dict, LOOKBACK_DAYS : int, get_all: bool):
+def process_race_data(f1_api : F1API, LOOKBACK_DAYS : int, get_all: bool):
     """Process and fetch race data."""
     
     if get_all == False : 
