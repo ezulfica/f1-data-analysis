@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: results
+    description: "Final race results, including positions, drivers, constructors, and fastest laps."
+
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: race_url
+        description: "Wikipedia URL of the race"
+      - name: race_date
+        description: "Date of the race"
+      - name: race_time
+        description: "Time the race started"
+
+      - name: car_number
+        description: "Driver's car number"
+      - name: final_position
+        description: "Final race position of the driver"
+      - name: position_text
+        description: "Position text representation"
+      - name: points_scored
+        description: "Points scored in the race"
+
+      - name: driver_id
+        description: "Driver ID assigned in F1 dataset"
+      - name: permanent_number
+        description: "Driver's permanent number"
+      - name: driver_code
+        description: "Driver's short code"
+      - name: driver_url
+        description: "Wikipedia link to driver profile"
+      - name: driver_given_name
+        description: "Driver's first name"
+      - name: driver_family_name
+        description: "Driver's last name"
+      - name: driver_dob
+        description: "Driver's date of birth"
+      - name: driver_nationality
+        description: "Driver's nationality"
+
+      - name: constructor_id
+        description: "Team (constructor) ID"
+      - name: constructor_url
+        description: "Wikipedia link to the constructor profile"
+      - name: constructor_name
+        description: "Constructor team name"
+      - name: constructor_nationality
+        description: "Constructor's country of origin"
+
+      - name: grid_position
+        description: "Starting grid position of the driver"
+      - name: laps_completed
+        description: "Number of laps completed"
+      - name: race_status
+        description: "Race status (e.g., Finished, Retired, Accident, etc.)"
+
+      - name: total_time_millis
+        description: "Total race time in milliseconds"
+      - name: total_time
+        description: "Formatted total race time"
+
+      - name: fastest_lap_rank
+        description: "Fastest lap rank"
+      - name: fastest_lap_number
+        description: "Lap number where fastest lap occurred"
+      - name: fastest_lap_time
+        description: "Time taken for the fastest lap"
+      - name: fastest_lap_speed_units
+        description: "Units of speed measurement"
+      - name: fastest_lap_speed
+        description: "Average speed of the fastest lap"
+
+    config:
+      materialized: incremental
+      unique_key: ["season", "round","driver_id", final_position]
+      
+      partition_by:
+        field: "season"
+        data_type : "int64"
+        range : 
+          start: 1950
+          end: 2050
+          interval: 1
+        
+      cluster_by: ["round","final_position"]

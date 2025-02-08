@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: pitstops
+    description: "pitstops times for each F1 race"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: Circuit_circuitId
+        description: "Unique identifier for the circuit"
+      - name: PitStops_driverId
+        description: "Driver ID associated with the pit stop"
+      - name: PitStops_lap
+        description: "Lap number where the pit stop occurred"
+      - name: PitStops_stop
+        description: "Pit stop number for the driver in the race"
+      - name: PitStops_time
+        description: "Time of the pit stop"
+      - name: PitStops_duration
+        description: "Duration of the pit stop"
+    config:
+      materialized: incremental
+      unique_key: ["season", "round", "stop" ,"driver_id"]
+      
+      partition_by:
+        field: "season"
+        data_type : "int64"
+        range : 
+          start: 1950
+          end: 2050
+          interval: 1
+        
+      cluster_by: "round"
