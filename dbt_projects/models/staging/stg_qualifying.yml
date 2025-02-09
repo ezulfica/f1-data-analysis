@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: qualifying_results
+  - name: stg_qualifying
     description: "qualifying results for each F1 race"
     
     columns:

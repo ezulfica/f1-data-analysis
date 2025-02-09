@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: pitstops
+  - name: stg_pitstops
     description: "pitstops times for each F1 race"
     
     columns:

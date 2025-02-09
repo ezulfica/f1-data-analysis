@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: laps
+  - name: stg_laps
     description: "Lap times for each F1 race"
     
     columns:

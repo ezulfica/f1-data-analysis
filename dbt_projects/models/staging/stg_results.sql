@@ -1,11 +1,3 @@
-{{ config(
-    materialized='incremental',
-    incremental_strategy='merge',
-    unique_key=['season', 'round', 'Results_Driver_driverId', 'Results_position'],
-    partition_by={'field': 'season', 'data_type': 'int64'},
-    cluster_by=['round', 'Results_Driver_driverId']
-) }}
-
 SELECT 
     season,
     round,

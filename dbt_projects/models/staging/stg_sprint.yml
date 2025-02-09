@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: sprint_results
+  - name: stg_sprint
     description: "Sprint race results, including positions, drivers, constructors, and fastest laps."
 
     columns:

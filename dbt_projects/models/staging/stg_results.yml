@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: results
+  - name: stg_results
     description: "Final race results, including positions, drivers, constructors, and fastest laps."
 
     columns:
