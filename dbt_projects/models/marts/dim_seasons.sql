@@ -3,4 +3,4 @@ SELECT DISTINCT
     round,
     date
     
-FROM {{ {{ source('f1_ingested', 'schedule') }}}}
+FROM {{ source('f1_ingested', 'schedule') }}
