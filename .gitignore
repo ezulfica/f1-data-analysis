@@ -11,4 +11,6 @@ prep/*
 prep copy/*
 data_load_into_bigquery/__pycache__/*
 dbt_projects/profiles.yml
+logs/*
+dbt_projects/logs/*
 logs/dbt.log
