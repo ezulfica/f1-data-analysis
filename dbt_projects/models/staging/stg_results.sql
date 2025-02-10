@@ -24,7 +24,7 @@ SELECT
     Results_Driver_url AS driver_url,
     Results_Driver_givenName AS driver_given_name,
     Results_Driver_familyName AS driver_family_name,
-    Results_Driver_dateOfBirth AS driver_dob,
+    Results_Driver_dateOfBirth AS driver_birthdate,
     Results_Driver_nationality AS driver_nationality,
     
     Results_Constructor_constructorId AS constructor_id,

@@ -4,6 +4,6 @@ SELECT DISTINCT
     driver_code,
     driver_given_name,
     driver_family_name,
-    driver_dob,
+    driver_birthdate,
     driver_nationality
 FROM {{ ref("stg_results")}}

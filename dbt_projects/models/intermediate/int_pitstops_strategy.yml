@@ -15,6 +15,10 @@ models:
         description: "numbers of stops made by the driver"
       - name: fastest_pitstop_duration
         description: "Fastest pitstop duration for the driver"
+      - name: race_fastest_pitstop_duration
+        description : "Fastest pitstop duration for the race" 
+      - name : season_fastest_pitstop_duration
+        description : "Fastest pitstop duration for the season"
 
     config:
       materialized: view

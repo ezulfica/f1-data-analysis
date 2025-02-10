@@ -37,7 +37,7 @@ models:
         description: "Driver's first name"
       - name: driver_family_name
         description: "Driver's last name"
-      - name: driver_dob
+      - name: driver_birthdate
         description: "Driver's date of birth"
       - name: driver_nationality
         description: "Driver's nationality"

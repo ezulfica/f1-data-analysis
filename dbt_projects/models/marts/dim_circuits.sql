@@ -12,8 +12,8 @@ WITH source_circuit AS (
 
 SELECT 
     circuit.*, 
-    countries.continent as source_circuit
-    FROM circuit_table AS circuit
-    LEFT JOIN circuit_table 
-    ON circuit.circuit_country = countries.country
-    WHERE circuit.circuit_country IS NOT NULL
+    countries.continent as continent
+FROM source_circuit AS circuit
+LEFT JOIN {{ref("countries")}} as countries
+ON circuit.circuit_country = countries.country
+WHERE circuit.circuit_country IS NOT NULL

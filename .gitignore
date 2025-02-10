@@ -1,6 +1,6 @@
 .venv
 config/*
-.vsocde/settings.json
+.vsocde/*
 data_ingestion/src/__pycache__/*
 data_ingestion/__pycache__/*
 utils/__pycache__/*

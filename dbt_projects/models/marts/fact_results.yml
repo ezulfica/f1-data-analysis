@@ -1,0 +1,27 @@
+
+version: 2
+
+models:
+  - name: fact_results
+    description: ""
+    
+    columns: 
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+
+    config:
+      materialized: table
+      unique_key: ["season", "round" ,"driver_id", "constructor_id"]
+      
+      partition_by:
+        field: "season"
+        data_type : "int64"
+        range : 
+          start: 1950
+          end: 2050
+          interval: 1
+        
+      cluster_by: ["round"]
+
