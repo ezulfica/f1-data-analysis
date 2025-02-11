@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: dim_race_status
+    description: "Dimension table for race status"
+    
+    columns:
+    - name: status
+      description: "Race status (e.g Finished, +1 Laps, Retired, Collision)"
+    - name: category
+      description: "Classification"
+      test : 
+        - not null
+
+    config:
+      materialized: table
+      unique_key: ["status"]
+
+
+
+
+
+
+ 

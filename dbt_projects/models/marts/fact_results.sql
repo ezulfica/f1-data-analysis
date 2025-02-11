@@ -1,4 +1,5 @@
 SELECT
+    CONCAT(result.season, "_", result.round, "_", result.Circuit_circuitId) as schedule_id,
     result.season,
     result.round,
     result.driver_id,

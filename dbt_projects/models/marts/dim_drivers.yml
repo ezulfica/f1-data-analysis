@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: dim_drivers
+    description: "Dimension table for drivers"
+    
+    columns:
+      - name: driver_id
+        description: "Unique identifier for each F1 driver."
+      - name: permanent_number
+        description: "The permanent racing number assigned to the driver."
+      - name: driver_code
+        description: "Short driver code used for identification in race results (e.g., HAM for Lewis Hamilton)."
+      - name: driver_given_name
+        description: "Driver's first (given) name."
+      - name: driver_family_name
+        description: "Driver's last (family) name."
+      - name: driver_birthdate
+        description: "Driver's date of birth in YYYY-MM-DD format."
+      - name: driver_nationality
+        description: "Nationality of the driver."
+
+    config:
+      materialized: table
+      unique_key: ["driver_id"]
+
+
+
+
+
+ 

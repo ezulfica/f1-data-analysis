@@ -1,10 +1,14 @@
-SELECT DISTINCT race_status as status
-FROM {{ ref('stg_results') }}
+WITH status_table AS (
+    SELECT DISTINCT race_status AS status,
+    FROM {{ ref('stg_results') }}
+    )
 
-UNION DISTINCT
-
-SELECT DISTINCT race_status as status
-FROM {{ ref('stg_sprint') }}
+SELECT 
+    st.status AS status,
+    cat.category AS category
+FROM status_table AS st
+LEFT JOIN {{ref('race_status_classification')}} AS cat
+ON st.status = cat.status
 
 
 
