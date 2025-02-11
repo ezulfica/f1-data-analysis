@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: stg_qualifying
+    description: "qualifying results for each F1 race"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: circuitId
+        description: "Unique identifier for the circuit"
+      - name: driverId
+        description: "Driver ID associated with the qualifying session"
+      - name: position
+        description: "Qualifying position of the driver"
+      - name: q1_time
+        description: "Q1 lap time"
+      - name: q2_time
+        description: "Q2 lap time"
+      - name: q3_time
+        description: "Q3 lap time"
+      - name: constructor_id
+        description: "Constructor team ID for the driver"
+
+
+    config:
+      materialized: incremental
+      unique_key: ["season", "round" ,"driver_id", "position"]
+      
+      partition_by:
+        field: "season"
+        data_type : "int64"
+        range : 
+          start: 1950
+          end: 2050
+          interval: 1
+      
+      cluster_by: ["round","position"]

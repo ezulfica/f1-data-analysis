@@ -1,0 +1,97 @@
+status,category
+Finished,Race Finished
++1 Lap,Race Finished (Laps Behind)
++4 Laps,Race Finished (Laps Behind)
++26 Laps,Race Finished (Laps Behind)
++46 Laps,Race Finished (Laps Behind)
+Disqualified,Regulation
+Excluded,Regulation
+Not classified,Regulation
+Underweight,Regulation
+107% Rule,Regulation
+Retired,General Retirement
+Withdrew,General Retirement
+Not restarted,General Retirement
+Safety concerns,General Retirement
+Accident,Accident
+Collision,Accident
+Collision damage,Accident
+Spun off,Accident
+Injury,Driver Health
+Fatal accident,Accident
+Driver unwell,Driver Health
+Physical,Driver Health
+Injured,Driver Health
+Illness,Driver Health
+Engine,Engine
+Engine fire,Engine
+Engine misfire,Engine
+Power Unit,Engine
+Gearbox,Transmission
+Driveshaft,Transmission
+Transmission,Transmission
+Axle,Transmission
+Differential,Transmission
+Halfshaft,Transmission
+Hydraulics,Hydraulic & Oil System
+Oil leak,Hydraulic & Oil System
+Oil line,Hydraulic & Oil System
+Oil pipe,Hydraulic & Oil System
+Oil pump,Hydraulic & Oil System
+Oil pressure,Hydraulic & Oil System
+Electrical,Electronics & Electrical
+Electronics,Electronics & Electrical
+Magneto,Electronics & Electrical
+Ignition,Electronics & Electrical
+Alternator,Electronics & Electrical
+Battery,Electronics & Electrical
+Spark plugs,Electronics & Electrical
+Cooling system,Cooling System
+Radiator,Cooling System
+Water pump,Cooling System
+Water leak,Cooling System
+Water pipe,Cooling System
+Water pressure,Cooling System
+Overheating,Cooling System
+Fuel,Fuel System
+Fuel leak,Fuel System
+Fuel pipe,Fuel System
+Fuel pump,Fuel System
+Fuel pressure,Fuel System
+Fuel rig,Fuel System
+Out of fuel,Fuel System
+Fuel system,Fuel System
+Injection,Fuel System
+Supercharger,Fuel System
+Suspension,Suspension & Steering
+Steering,Suspension & Steering
+Handling,Suspension & Steering
+Track rod,Suspension & Steering
+Clutch,Clutch & Brakes
+Brakes,Clutch & Brakes
+Brake duct,Clutch & Brakes
+Tyre,Tyres & Wheels
+Puncture,Tyres & Wheels
+Tyre puncture,Tyres & Wheels
+Wheel,Tyres & Wheels
+Wheel rim,Tyres & Wheels
+Wheel nut,Tyres & Wheels
+Wheel bearing,Tyres & Wheels
+Exhaust,Exhaust & Turbocharging
+Heat shield fire,Exhaust & Turbocharging
+Turbo,Exhaust & Turbocharging
+Chassis,Chassis & Bodywork
+Rear wing,Chassis & Bodywork
+Front wing,Chassis & Bodywork
+Broken wing,Chassis & Bodywork
+Pneumatics,Auxiliary Systems
+ERS,Auxiliary Systems
+Power loss,Auxiliary Systems
+Fire,Other Issues
+Safety,Other Issues
+Safety belt,Other Issues
+Driver Seat,Other Issues
+Undertray,Other Issues
+Seat,Other Issues
+Refuelling,Other Issues
+Damage,Other Issues

@@ -1,0 +1,34 @@
+
+version: 2
+
+models:
+  - name: dim_circuits
+    description: "Dimension table for circuits"
+    
+    columns: 
+      - name: circuit_id
+        description: "Racing season year"
+      - name: circuit_name
+        description: "The official name of the circuit."
+      - name: circuit_lat
+        description: "Latitude coordinate of the circuit location."
+      - name: circuit_long
+        description: "Longitude coordinate of the circuit location."
+      - name: circuit_locality
+        description: "Locality (city or town) where the circuit is located."
+      - name: circuit_country
+        description: "Country where the circuit is located."
+      - name: continent
+        description: "Continent associated with the circuit country, retrieved via a join with the 'countries' reference model."
+      - name: raceName
+        description: "The name of the race event associated with the circuit."
+
+
+    config:
+      materialized: table
+      unique_key: ["circuit_id"]
+      
+
+
+
+ 

@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: int_pitstops_strategy
+    description: "Intermediate table to calculate the number of pitstops for each driver and each race and get the fastest between their stops"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: driver_id
+        description: "Unique identifier for the driver"
+      - name: pitstop_count
+        description: "numbers of stops made by the driver"
+      - name: fastest_pitstop_duration
+        description: "Fastest pitstop duration for the driver"
+      - name: race_fastest_pitstop_duration
+        description : "Fastest pitstop duration for the race" 
+      - name : season_fastest_pitstop_duration
+        description : "Fastest pitstop duration for the season"
+
+    config:
+      materialized: view
+      unique_key: ["season", "round" ,"driver_id"]
+      
+      partition_by:
+        field: "season"
+        data_type : "int64"
+        range : 
+          start: 1950
+          end: 2050
+          interval: 1
+        
+      cluster_by: ["round"]

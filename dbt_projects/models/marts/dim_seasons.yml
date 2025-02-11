@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: dim_seasons
+    description: "Dimension table for seasons"
+    
+    columns:
+    - name: season
+      description: "The racing season (year) in which the race takes place."
+
+    config:
+      materialized: table
+      unique_key: ["season"]
+
+

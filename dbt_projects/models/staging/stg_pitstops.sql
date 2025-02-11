@@ -1,0 +1,20 @@
+SELECT 
+    season,
+    round,
+    url AS race_url,
+    raceName,
+    Circuit_circuitId,
+    Circuit_url AS circuit_url,
+    Circuit_circuitName,
+    Circuit_Location_lat,
+    Circuit_Location_long,
+    Circuit_Location_locality,
+    Circuit_Location_country,
+    date AS race_date,
+    time AS race_time,
+    PitStops_driverId AS driver_id,
+    PitStops_lap AS lap,
+    PitStops_stop AS stop,
+    PitStops_time AS pit_time,
+    PitStops_duration AS pit_duration
+FROM {{source('f1_ingested', 'pitstops')}}

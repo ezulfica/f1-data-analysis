@@ -1,0 +1,36 @@
+
+version: 2
+
+models:
+  - name: int_results
+    description: "Intermediate table to calculate the results of the race"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: driver_id
+        description: "Unique identifier for the driver"
+      - name: race_grid_position
+        description: "Starting position of the driver in the race"
+      - name: race_final_position
+        description: "Final position of the driver in the race"
+      - name : race_points
+        description: "Points scored by the driver in the race"
+
+
+    config:
+      materialized: view
+      unique_key: ["season", "round" ,"driver_id"]
+      
+      partition_by:
+        field: "season"
+        data_type : "int64"
+        range : 
+          start: 1950
+          end: 2050
+          interval: 1
+        
+      cluster_by: ["round"]
+

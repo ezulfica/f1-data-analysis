@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_laps
+    description: "Lap times for each F1 race"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: Circuit_circuitId
+        description: "Unique identifier for the circuit"
+      - name: Laps_number
+        description: "Lap number"
+      - name: Laps_Timings_driverId
+        description: "Driver ID associated with the lap time"
+      - name: Laps_Timings_position
+        description: "Position of the driver in the lap"
+      - name: Laps_Timings_time
+        description: "Lap time recorded for the driver"
+
+    config:
+      materialized: incremental
+      unique_key: ["season", "round", "Laps_number" ,"driver_id"]
+      
+      partition_by:
+        field: "season"
+        data_type : "int64"
+        range : 
+          start: 1950
+          end: 2050
+          interval: 1
+        
+      # cluster_by: ["round","position"]

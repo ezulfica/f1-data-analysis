@@ -1,0 +1,159 @@
+version: 2
+
+sources:
+  - name: f1_ingested  # Replace with your actual source name
+    description: "Formula 1 ingested data"
+    database: f1-dataanalysis  # Replace with actual database name
+    schema: staging_load  # Replace with actual schema name
+    tables:
+    # == laps table ==
+      - name: laps
+        description: "Table containing race information"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "Round number of the race"
+            tests:
+              - not_null
+          - name: url
+            description: "Official URL of the race"
+          - name: raceName
+            description: "Name of the race"
+          - name: Circuit_circuitId
+            description: "Unique circuit identifier"
+            tests:
+              - not_null
+          - name: Circuit_url
+            description: "Circuit URL"
+          - name: Circuit_circuitName
+            description: "Name of the circuit"
+          - name: Circuit_Location_lat
+            description: "Latitude of the circuit location"
+          - name: Circuit_Location_long
+            description: "Longitude of the circuit location"
+          - name: Circuit_Location_locality
+            description: "Locality of the circuit"
+          - name: Circuit_Location_country
+            description: "Country of the circuit"
+          - name: date
+            description: "Date of the race"
+            tests:
+              - not_null
+          - name: time
+            description: "Time of the race"
+          - name: Laps_number
+            description: "Total number of laps"
+          - name: Laps_Timings_driverId
+            description: "Driver ID associated with the lap timing"
+          - name: Laps_Timings_position
+            description: "Position of the driver for a given lap"
+          - name: Laps_Timings_time
+            description: "Recorded lap time"
+
+      # == pitstops table ==
+      - name: pitstops
+        description: "Table containing pit stop data"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "Round number of the race"
+            tests:
+              - not_null
+          - name: PitStops_driverId
+            description: "Driver ID associated with the pit stop"
+          - name: PitStops_lap
+            description: "Lap number when the pit stop occurred"
+          - name: PitStops_stop
+            description: "Pit stop sequence number"
+          - name: PitStops_time
+            description: "Time when the pit stop occurred"
+          - name: PitStops_duration
+            description: "Duration of the pit stop"
+
+      # == qualifying table ==  
+      - name: qualifying
+        description: "Table containing qualifying results"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "Round number of the race"
+            tests:
+              - not_null
+          - name: QualifyingResults_Driver_driverId
+            description: "Driver ID"
+          - name: QualifyingResults_position
+            description: "Starting position after qualifying"
+          - name: QualifyingResults_Q1
+            description: "Q1 lap time"
+          - name: QualifyingResults_Q2
+            description: "Q2 lap time"
+          - name: QualifyingResults_Q3
+            description: "Q3 lap time"
+
+      # == results table ==
+      - name: results
+        description: "Table containing race results"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "Round number of the race"
+            tests:
+              - not_null
+          - name: Results_Driver_driverId
+            description: "Driver ID"
+          - name: Results_position
+            description: "Final race position"
+          - name: Results_points
+            description: "Points earned in the race"
+          - name: Results_FastestLap_Time_time
+            description: "Fastest lap time"
+
+      # == schedule table ==
+      - name: schedule
+        description: "Table containing the race schedule"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "Round number of the race"
+            tests:
+              - not_null
+          - name: date
+            description: "Date of the race"
+            tests:
+              - not_null
+
+      # == sprint table ==
+      - name: sprint
+        description: "Table containing sprint race results"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "Round number of the race"
+            tests:
+              - not_null
+          - name: SprintResults_Driver_driverId
+            description: "Driver ID"
+          - name: SprintResults_position
+            description: "Final sprint position"
+          - name: SprintResults_points
+            description: "Points earned in the sprint race"
+          - name: SprintResults_FastestLap_Time_time
+            description: "Fastest lap time in sprint race"
