@@ -2,11 +2,11 @@
 name = "f1-data-collection"
 version = "0.1.0"
 description = ""
-authors = ["eric.zulficar <ezulfica@gmail.com>"]
+authors = ["eric.zulficar"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+ python = ">=3.10,<3.12"
 requests = "^2.32.3"
 python-dotenv = "^1.0.1"
 pyyaml = "^6.0.2"
@@ -20,6 +20,7 @@ pyarrow = "^19.0.0"
 tqdm = "^4.67.1"
 google-cloud-bigquery = "^3.29.0"
 dbt-bigquery = "^1.9.1"
+apache-airflow = "^2.10.5"
 
 
 [build-system]
