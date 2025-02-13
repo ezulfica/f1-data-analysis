@@ -36,11 +36,17 @@ def upload_file(s3_client : S3Client, filename : str):
 def upload_results(s3_client: S3Client, foldername: str) -> None : 
     filelist = get_all_file_paths(foldername)
 
-    txt = "\n".join(filelist)
-    s3_client.write_object(object_key=uploaded_file, data=txt)
+    try : 
+        txt = "\n".join(filelist)
+        s3_client.write_object(object_key=uploaded_file, data=txt)    
+        with ThreadPoolExecutor(max_workers=3) as executor : 
+            uploaded_file = [
+                executor.submit(upload_file(s3_client, filename)) for filename in filelist
+                ]
+        logging.info("Files uploaded in S3!")
+    except : 
+        logging.info("no list to upload")
 
-    with ThreadPoolExecutor(max_workers=3) as executor : 
-        uploaded_file = [
-            executor.submit(upload_file(s3_client, filename)) for filename in filelist
-            ]
-    logging.info("Files uploaded in S3!")
+
+      
+
