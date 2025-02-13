@@ -1,5 +1,4 @@
 .venv
-config/*
 .vsocde/*
 data_ingestion/src/__pycache__/*
 data_ingestion/__pycache__/*
@@ -13,3 +12,6 @@ data_load_into_bigquery/__pycache__/*
 dbt_projects/profiles.yml
 logs/*
 dags/__pycache__/*
+config/.env
+config/f1-dataanalysis-6582b035da22.json
+config/settings.yaml

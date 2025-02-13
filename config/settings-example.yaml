@@ -1,0 +1,13 @@
+f1_api:
+  base_url: "http://api.jolpi.ca/ergast/f1/" #Base url for the API
+
+  season_category: #Cateogories that does not require race round
+    - 'results'
+    - 'sprint'
+    - 'qualifying'
+
+  round_category : #Categories that require race round
+    - 'pitstops'
+    - 'laps'
+
+  timeout: 10  # Waiting time for requests (in seconds)
