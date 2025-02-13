@@ -18,8 +18,8 @@ def main():
     s3_client = connect_s3(config)
     f1_api = F1API()
     fetch_f1_schedule(s3_client, config, f1_api)
-    process_race_data(f1_api, LOOKBACK_DAYS, get_all=True)
+    process_race_data(f1_api, LOOKBACK_DAYS, get_all=False)
     upload_results(s3_client, f1_api.folder_name)
-
+    
 if __name__ == "__main__":
     main()
