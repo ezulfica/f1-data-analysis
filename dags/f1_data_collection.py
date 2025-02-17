@@ -8,7 +8,7 @@ import os
 
 #bash_command
 cwd = os.getcwd()
-poetry_shell_command = f'cd "{cwd}" && poetry shell'
+poetry_shell_command = f'cd "{cwd}"'
 poetry_run_command = f'{poetry_shell_command} && poetry run python -m'
 data_prep_command = f'{poetry_run_command} data_prep.main' 
 data_ingest_command = f'{poetry_run_command} data_ingestion.main' 
