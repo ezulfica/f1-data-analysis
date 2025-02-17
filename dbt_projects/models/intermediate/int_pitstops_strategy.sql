@@ -20,6 +20,6 @@ SELECT
         END AS pitstop_strategy,
 
     MIN(fastest_pitstop_duration) OVER (PARTITION BY season, round) as race_fastest_pitstop_duration,
-    MIN(fastest_pitstop_duration) OVER (PARTITION BY season, round) as season_fastest_pitstop_duration
+    MIN(fastest_pitstop_duration) OVER (PARTITION BY season) as season_fastest_pitstop_duration
 
 FROM pitstops_cte

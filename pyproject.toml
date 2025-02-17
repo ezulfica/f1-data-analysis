@@ -3,7 +3,8 @@ name = "f1-data-collection"
 version = "0.1.0"
 description = ""
 authors = ["eric.zulficar"]
-readme = "README.md"
+package-mode = false
+
 
 [tool.poetry.dependencies]
  python = ">=3.10,<3.12"
