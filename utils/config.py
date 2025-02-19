@@ -1,10 +1,12 @@
-import yaml 
-import os 
+import yaml
+import os
+
 
 def load_settings(path):
     with open(path) as file:
         settings = yaml.safe_load(file)
     return settings
+
 
 def get_all_file_paths(directory):
     file_paths = []
@@ -13,6 +15,6 @@ def get_all_file_paths(directory):
             file_paths.append(os.path.join(root, file))
     return file_paths
 
+
 # Example usage
 all_files = get_all_file_paths("raw/")
-

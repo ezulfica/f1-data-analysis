@@ -6,12 +6,12 @@ SETTINGS_PATH = "config/settings.yaml"
 CONFIG_PATH = "config/.env"
 
 
-def main() : 
+def main():
     config = dotenv_values(CONFIG_PATH)
     s3_client = connect_s3(config)
     s3_files = file_to_prep("raw/")
-    data_loading_concurrency(s3_client=s3_client, files = s3_files)
+    data_loading_concurrency(s3_client=s3_client, files=s3_files)
+
 
 if __name__ == "__main__":
     main()
-

@@ -7,18 +7,18 @@ from utils.s3_client import S3Client
 from utils.s3_utils import read_object_into_json
 
 
-def get_last_date(f1_schedule : list) : 
-    date = max([schedule['date'] for schedule in f1_schedule])
+def get_last_date(f1_schedule: list):
+    date = max([schedule["date"] for schedule in f1_schedule])
     return date
 
-def fetch_f1_schedule(s3_client:S3Client, config:dict, f1_api:F1API):
+
+def fetch_f1_schedule(s3_client: S3Client, config: dict, f1_api: F1API):
     """Retrieve the F1 schedule from S3 or update it if outdated."""
-    s3_f1_schedule_file = f'{f1_api.folder_name}/f1_schedule.json'
-    
+    s3_f1_schedule_file = f"{f1_api.folder_name}/f1_schedule.json"
+
     f1_schedule = read_object_into_json(
-        s3_client=s3_client,
-        object_key=s3_f1_schedule_file
-        )
+        s3_client=s3_client, object_key=s3_f1_schedule_file
+    )
 
     last_schedule_date = get_last_date(f1_schedule)
     today = date.today().strftime("%Y-%m-%d")
@@ -35,19 +35,21 @@ def fetch_f1_schedule(s3_client:S3Client, config:dict, f1_api:F1API):
         logging.info("Using existing F1 schedule.")
         f1_api.f1_schedule = f1_schedule
 
+
 def process_race_data(f1_api: F1API, LOOKBACK_DAYS: int, get_all: bool):
     """Process and fetch race data."""
-    
-    if get_all == False : 
+
+    if get_all == False:
         today = date.today()
         date_range_start = (today - timedelta(days=LOOKBACK_DAYS)).strftime("%Y-%m-%d")
         date_range_end = today.strftime("%Y-%m-%d")
 
         f1_api.pending_races = [
-            race for race in f1_api.f1_schedule
-            if date_range_start <= race['date'] <= date_range_end
+            race
+            for race in f1_api.f1_schedule
+            if date_range_start <= race["date"] <= date_range_end
         ]
-    else :  
+    else:
         f1_api.pending_races = f1_api.f1_schedule
 
     logging.info("Fetching race results...")
@@ -55,5 +57,3 @@ def process_race_data(f1_api: F1API, LOOKBACK_DAYS: int, get_all: bool):
     sleep(2)
     logging.info("Fetching race data...")
     f1_api.fetch_races_data()
-    
- 
