@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: int_circuits
+    description: Intermediate table for the circuits
+    columns:
+      - name: circuit_id
+        tests:
+          - unique
+    config:
+      materialized: view
+      unique_key: circuit_id
