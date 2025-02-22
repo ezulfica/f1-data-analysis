@@ -10,6 +10,7 @@ def main():
     config = dotenv_values(CONFIG_PATH)
     s3_client = connect_s3(config)
     s3_files = file_to_prep("raw/")
+    s3_files.sort()
     data_loading_concurrency(s3_client=s3_client, files=s3_files)
 
 
