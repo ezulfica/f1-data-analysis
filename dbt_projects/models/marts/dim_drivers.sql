@@ -6,4 +6,5 @@ SELECT DISTINCT
     driver_family_name,
     driver_birthdate,
     driver_nationality
-FROM {{ ref("stg_results")}}
+FROM {{ ref("int_drivers")}}
+ORDER BY driver_id
