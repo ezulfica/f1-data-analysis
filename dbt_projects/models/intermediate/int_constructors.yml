@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: int_constructors
+    description: View made in order to harmonize the constructor identifier
+    columns:
+      - name: constructor_id
+        tests:
+          - unique
+          - not null
+    config:
+      materialized: view
+      unique_key: circuit_id
