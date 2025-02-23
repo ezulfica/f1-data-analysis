@@ -3,5 +3,5 @@ SELECT DISTINCT
     constructor_url,
     constructor_name,
     constructor_nationality
-FROM {{ ref("int_constructor")}}
+FROM {{ ref("int_constructors")}}
 ORDER BY constructor_id
