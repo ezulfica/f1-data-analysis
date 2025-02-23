@@ -7,7 +7,7 @@ models:
       - name: constructor_id
         tests:
           - unique
-          - not null
+          - not_null
     config:
       materialized: view
       unique_key: circuit_id

@@ -11,4 +11,3 @@ SELECT
         ELSE 0
         END AS constructor_champion
 FROM {{ref("int_performances")}}
-ORDER BY season DESC, season_driver_rank

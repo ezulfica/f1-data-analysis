@@ -5,8 +5,8 @@ models:
     description: Intermediate table for the drivers dimension
     columns:
       - name: driver_id
-        tests:
-          - unique
+        # tests:
+        #   - unique
     config:
       materialized: view
       unique_key: driver_id

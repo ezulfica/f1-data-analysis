@@ -40,8 +40,3 @@ LEFT JOIN
 ON gp.season = sprint.season AND gp.driver_id = sprint.driver_id
 LEFT JOIN {{ref("constructor_newgroup")}} AS constructors
 ON constructors.constructor_id = gp.constructor_id
-
-ORDER BY 
-    season DESC,
-    gp.race_points DESC
-

@@ -7,4 +7,3 @@ SELECT DISTINCT
     driver_birthdate,
     driver_nationality
 FROM {{ ref("int_drivers")}}
-ORDER BY driver_id

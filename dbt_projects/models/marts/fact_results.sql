@@ -26,5 +26,4 @@ LEFT JOIN {{ ref('int_pitstops_strategy') }} as pitstops
 ON result.season = pitstops.season
 AND result.round = pitstops.round
 AND result.driver_id = pitstops.driver_id
-ORDER BY season DESC, round DESC, race_final_position
 
