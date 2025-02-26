@@ -64,8 +64,8 @@ def load_and_transform_data(folder: str, schema_json: dict) -> dict:
     datasets = load_and_concat(folder)  # Load data
 
 
-    if "schedule" in datasets.keys() : 
-        datasets["schedule"] = datasets.pop(folder)
+    # if "schedule" in datasets.keys() : 
+    #     datasets["schedule"] = datasets.pop(folder)
 
     transformed_datasets = {}
     for table, df in datasets.items():
