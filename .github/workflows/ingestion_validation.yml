@@ -3,7 +3,7 @@ name: Ingestion CI
 on:
   pull_request:
     paths:
-      - 'ingestion/**'           # Ingestion code changes
+      - 'data_ingestion/**'           # Ingestion code changes
       - 'tests/test_ingestion/**' # Ingestion test changes
       - 'config/settings.yaml'    # Config changes
 
