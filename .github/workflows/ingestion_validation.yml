@@ -1,15 +1,17 @@
 name: Ingestion CI
 
 on:
+  push:
+    branches:
+      - main 
   pull_request:
     paths:
-      - 'data_ingestion/**'           # Ingestion code changes
+      - 'data_ingestion/**'       # Ingestion code changes
       - 'tests/test_ingestion/**' # Ingestion test changes
       - 'config/settings.yaml'    # Config changes
 
 jobs:
   ingestion-tests:
-    if: contains(join(github.event.pull_request.labels.*), 'needs-ingestion-test')
     runs-on: ubuntu-latest
 
     steps:
