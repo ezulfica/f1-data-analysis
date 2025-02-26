@@ -15,5 +15,5 @@ logs/*
 dags/__pycache__/*
 config/.env
 config/f1-dataanalysis-6582b035da22.json
-config/settings.yaml
 run.sh
+tests/__pycache__/*
