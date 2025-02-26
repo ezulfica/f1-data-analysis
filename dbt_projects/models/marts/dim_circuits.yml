@@ -8,6 +8,8 @@ models:
     columns: 
       - name: circuit_id
         description: "Racing season year"
+        tests:
+          - unique
       - name: circuit_name
         description: "The official name of the circuit."
       - name: circuit_lat

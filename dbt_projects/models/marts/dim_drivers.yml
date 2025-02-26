@@ -7,6 +7,8 @@ models:
     columns:
       - name: driver_id
         description: "Unique identifier for each F1 driver."
+        tests : 
+          - unique
       - name: permanent_number
         description: "The permanent racing number assigned to the driver."
       - name: driver_code

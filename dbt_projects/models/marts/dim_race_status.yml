@@ -10,7 +10,7 @@ models:
     - name: category
       description: "Classification"
       test : 
-        - not null
+        - not_null
 
     config:
       materialized: table

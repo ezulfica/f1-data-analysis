@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: fact_performances
+    description: "Season standings with driver/constructor rankings and championship flags calculated through window functions"
+    
+    columns:
+      # Inherited columns from int_performances
+      - name: season
+        description: "Racing season year"
+        
+      - name: driver_id
+        description: "Unique identifier for the driver"
+        
+      - name: constructor_id
+        description: "Unique identifier for the constructor/team"
+        
+      - name: drivers_points
+        description: "Total points scored by driver (GP races + sprint races)"
+        
+      - name: constructor_points
+        description: "Aggregated points for the constructor from all their drivers"
+        
+      - name: race_wins
+        description: "Number of Grand Prix race victories"
+        
+      - name: sprints_wins
+        description: "Number of sprint race victories"
+        
+      # New calculated columns
+      - name: season_driver_rank
+        description: "Driver's championship position within season using DENSE_RANK"
+        
+      - name: season_constructor_rank
+        description: "Constructor's championship position within season using DENSE_RANK"
+        
+      - name: driver_champion
+        description: "Boolean flag (1/0) indicating if driver won the season championship"
+        
+      - name: constructor_champion
+        description: "Boolean flag (1/0) indicating if constructor won the season championship"
+
+    config:
+      materialized: table
+      unique_key: ["season", "driver_id", "constructor_id"]
+      
+      partition_by:
+        field: season
+        data_type: int64
+        range:
+          start: 1950
+          end: 2050
+          interval: 1
+      
+      cluster_by: ["constructor_id", "driver_id"]
