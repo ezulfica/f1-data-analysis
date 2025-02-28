@@ -1,9 +1,12 @@
 f1_api:
-  base_url: "http://api.jolpi.ca/ergast/f1/"
+  base_url_raw: "http://api.jolpi.ca/ergast/f1/"
+  base_url: "http://127.0.0.1:8001/ergast/f1/"
   season_category:
     - 'results'
     - 'sprint'
     - 'qualifying'
+    - 'driverstandings'
+    - 'constructorstandings'
   round_category : 
     - 'pitstops'
     - 'laps'

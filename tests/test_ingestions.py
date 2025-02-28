@@ -20,11 +20,11 @@ def race_round(request):
     return request.param
 
 @pytest.fixture(params=[
-    ("results", "season")#,
-    # ("qualifying", "season"),
-    # ("sprint", "season"),
-    # ("laps", "race"),
-    # ("pitstops", "race")
+    ("results", "season"),
+    ("qualifying", "season"),
+    ("sprint", "season"),
+    ("laps", "race"),
+    ("pitstops", "race")
 ], ids=lambda p: f"{p[0]}-{p[1]}")
 def category_type(request):
     """Parameterize both category and its type"""
