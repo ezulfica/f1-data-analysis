@@ -19,7 +19,6 @@ prep*/
 logs/
 config/.env
 config/f1-dataanalysis-b14aabd9fd9e.json
-config/settings.yaml
 
 # DBT projects
 dbt_projects/profiles.yml

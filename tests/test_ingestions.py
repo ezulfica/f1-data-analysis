@@ -15,7 +15,7 @@ def f1_api():
 def season(request):
     return request.param
 
-@pytest.fixture(params=[1], ids=["round=1"])
+@pytest.fixture(params=["1"], ids=["round=1"])
 def race_round(request):
     return request.param
 
@@ -44,13 +44,20 @@ def expected_data(category_type):
 @pytest.fixture
 def api_url(category_type, f1_api, season, race_round):
     category, data_type = category_type
-    
-    f1_api.base_url_data(
+
+    if data_type == "season": 
+        return f1_api.base_url_data(
+                category=category,
+                season=season
+            )
+    elif data_type == "race": 
+        return f1_api.base_url_data(
             category=category,
             season=season,
             race_round=race_round
-        )
-    pytest.fail(f"Unknown data type: {data_type}")
+    )
+    else : 
+        return pytest.fail(f"Unknown data type: {data_type}")
 
 
 # ---------- Tests ----------
