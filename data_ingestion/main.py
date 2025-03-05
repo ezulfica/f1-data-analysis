@@ -27,3 +27,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+f1_api = F1API()
+f1_api.build_base_url_data()
+
+f1_api.round_category
+f1_api.season_category

@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: stg_driverstandings
+    description: "Driver standings for each F1 race"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: DriverStandings_position
+        description: "Driver's position in the standings"
+      - name: DriverStandings_positionText
+        description: "Text representation of the driver's position"
+      - name: DriverStandings_points
+        description: "Total points accumulated by the driver"
+      - name: DriverStandings_wins
+        description: "Total number of wins by the driver"
+      - name: DriverStandings_Driver_driverId
+        description: "Unique driver identifier"
+      - name: DriverStandings_Driver_permanentNumber
+        description: "Permanent driver number"
+      - name: DriverStandings_Driver_code
+        description: "Driver's code abbreviation"
+      - name: DriverStandings_Driver_url
+        description: "Driver's official URL"
+      - name: DriverStandings_Driver_givenName
+        description: "Driver's first name"
+      - name: DriverStandings_Driver_familyName
+        description: "Driver's last name"
+      - name: DriverStandings_Driver_dateOfBirth
+        description: "Driver's date of birth"
+      - name: DriverStandings_Driver_nationality
+        description: "Nationality of the driver"
+      - name: DriverStandings_Constructors_constructorId
+        description: "Unique constructor identifier"
+      - name: DriverStandings_Constructors_url
+        description: "Constructor's official URL"
+      - name: DriverStandings_Constructors_name
+        description: "Name of the constructor"
+      - name: DriverStandings_Constructors_nationality
+        description: "Nationality of the constructor"
+
+    config:
+      materialized: incremental
+      unique_key: ["season", "round", "DriverStandings_Driver_driverId"]
+      
+      partition_by:
+        field: "season"
+        data_type: "int64"
+        range:
+          start: 1950
+          end: 2050
+          interval: 1
+          
+      # cluster_by: ["round", "DriverStandings_position"]

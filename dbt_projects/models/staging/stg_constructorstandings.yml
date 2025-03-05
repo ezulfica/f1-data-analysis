@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: stg_constructorstandings
+    description: "Constructor standings for each F1 race"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: round
+        description: "Race round within the season"
+      - name: ConstructorStandings_position
+        description: "Constructor's position in the standings"
+      - name: ConstructorStandings_positionText
+        description: "Text representation of the constructor's position"
+      - name: ConstructorStandings_points
+        description: "Total points accumulated by the constructor"
+      - name: ConstructorStandings_wins
+        description: "Total number of wins by the constructor"
+      - name: ConstructorStandings_Constructor_constructorId
+        description: "Unique constructor identifier"
+      - name: ConstructorStandings_Constructor_url
+        description: "Constructor's official URL"
+      - name: ConstructorStandings_Constructor_name
+        description: "Name of the constructor"
+      - name: ConstructorStandings_Constructor_nationality
+        description: "Nationality of the constructor"
+
+    config:
+      materialized: incremental
+      unique_key: ["season", "round", "ConstructorStandings_Constructor_constructorId"]
+      
+      partition_by:
+        field: "season"
+        data_type: "int64"
+        range:
+          start: 1950
+          end: 2050
+          interval: 1
+          
+      # cluster_by: ["round", "ConstructorStandings_position"]

@@ -157,3 +157,79 @@ sources:
             description: "Points earned in the sprint race"
           - name: SprintResults_FastestLap_Time_time
             description: "Fastest lap time in sprint race"
+
+      - name: driverstandings
+        description: "Table containing driver standings data"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "Round number of the race"
+            tests:
+              - not_null
+          - name: DriverStandings_position
+            description: "Driver's position in the standings"
+          - name: DriverStandings_positionText
+            description: "Text representation of the driver's position"
+          - name: DriverStandings_points
+            description: "Total points accumulated by the driver"
+          - name: DriverStandings_wins
+            description: "Total number of wins by the driver"
+          - name: DriverStandings_Driver_driverId
+            description: "Unique driver identifier"
+            tests:
+              - not_null
+          - name: DriverStandings_Driver_permanentNumber
+            description: "Permanent driver number"
+          - name: DriverStandings_Driver_code
+            description: "Driver's code abbreviation"
+          - name: DriverStandings_Driver_url
+            description: "Driver's official URL"
+          - name: DriverStandings_Driver_givenName
+            description: "Driver's first name"
+          - name: DriverStandings_Driver_familyName
+            description: "Driver's last name"
+          - name: DriverStandings_Driver_dateOfBirth
+            description: "Driver's date of birth"
+          - name: DriverStandings_Driver_nationality
+            description: "Nationality of the driver"
+          - name: DriverStandings_Constructors_constructorId
+            description: "Unique constructor identifier"
+          - name: DriverStandings_Constructors_url
+            description: "Constructor's official URL"
+          - name: DriverStandings_Constructors_name
+            description: "Name of the constructor"
+          - name: DriverStandings_Constructors_nationality
+            description: "Nationality of the constructor"
+
+      - name: constructorstandings
+        description: "Table containing constructor standings data"
+        columns:
+          - name: season
+            description: "Year of the race season"
+            tests:
+              - not_null
+          - name: round
+            description: "number of race for the season"
+            tests:
+              - not_null
+          - name: ConstructorStandings_position
+            description: "Constructor's position in the standings"
+          - name: ConstructorStandings_positionText
+            description: "Text representation of the constructor's position"
+          - name: ConstructorStandings_points
+            description: "Total points accumulated by the constructor"
+          - name: ConstructorStandings_wins
+            description: "Total number of wins by the constructor"
+          - name: ConstructorStandings_Constructor_constructorId
+            description: "Unique constructor identifier"
+            tests:
+              - not_null
+          - name: ConstructorStandings_Constructor_url
+            description: "Constructor's official URL"
+          - name: ConstructorStandings_Constructor_name
+            description: "Name of the constructor"
+          - name: ConstructorStandings_Constructor_nationality
+            description: "Nationality of the constructor"
