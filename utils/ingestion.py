@@ -1,16 +1,13 @@
 import logging
 from datetime import date, timedelta
 import json
-from time import sleep
 from data_ingestion.src.f1_api import F1API
 from utils.s3_client import S3Client
 from utils.s3_utils import read_object_into_json
 
-
 def get_last_date(f1_schedule: list):
     date = max([schedule["date"] for schedule in f1_schedule])
     return date
-
 
 def fetch_f1_schedule(s3_client: S3Client, config: dict, f1_api: F1API):
     """Retrieve the F1 schedule from S3 or update it if outdated."""
@@ -53,7 +50,7 @@ def process_race_data(f1_api: F1API, LOOKBACK_DAYS: int, get_all: bool):
         f1_api.pending_races = f1_api.f1_schedule
 
     logging.info("Fetching race results...")
-    f1_api.fetch_seasons_results()
-    sleep(2)
-    logging.info("Fetching race data...")
-    f1_api.fetch_races_data()
+    try: 
+        f1_api.fetch_data()
+    except Exception as e:
+        logging.error(f"Error fetching season results: {e}")

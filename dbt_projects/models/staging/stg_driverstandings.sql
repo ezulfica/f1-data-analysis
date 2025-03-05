@@ -1,0 +1,20 @@
+SELECT 
+    season,
+    round,
+    DriverStandings_position AS position,
+    DriverStandings_positionText AS position_text,
+    DriverStandings_points AS points,
+    DriverStandings_wins AS wins,
+    DriverStandings_Driver_driverId AS driver_id,
+    DriverStandings_Driver_permanentNumber AS permanent_number,
+    DriverStandings_Driver_code AS driver_code,
+    DriverStandings_Driver_url AS driver_url,
+    DriverStandings_Driver_givenName AS given_name,
+    DriverStandings_Driver_familyName AS family_name,
+    DriverStandings_Driver_dateOfBirth AS date_of_birth,
+    DriverStandings_Driver_nationality AS nationality,
+    DriverStandings_Constructors_constructorId AS constructor_id,
+    DriverStandings_Constructors_url AS constructor_url,
+    DriverStandings_Constructors_name AS constructor_name,
+    DriverStandings_Constructors_nationality AS constructor_nationality
+FROM {{ source('f1_ingested', 'driverstandings') }}

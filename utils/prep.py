@@ -12,14 +12,14 @@ def file_to_prep(directory: str):
     return [str(filename) for filename in path_ if filename.suffix == ".json"]
 
 
-def data_loading_concurrency(s3_client: S3Client, files: list):
+def data_loading_concurrency(s3_client: S3Client, files: list) -> None:
 
     num_files = len(files)
 
     with tqdm(total=num_files) as pbar:
         with ThreadPoolExecutor(max_workers=5) as executor:
             future_to_file = [
-                executor.submit(prep_data_into_s3(s3_client, object_key))
+                executor.submit(prep_data_into_s3, s3_client, object_key)
                 for object_key in files
             ]
             for _ in as_completed(future_to_file):
@@ -46,7 +46,12 @@ def read_object_into_table(object_key: str) -> tuple:
     if "f1_schedule" in object_key:
         dt = pl.DataFrame(data)
     else:
-        dataframes = [pl.DataFrame(dt["MRData"]["RaceTable"]["Races"]) for dt in data]
+        dataframes = [
+            pl.DataFrame(dt["MRData"]["RaceTable"]["Races"] if "RaceTable" in dt["MRData"].keys() 
+                         else dt["MRData"]["StandingsTable"]["StandingsLists"]) for dt in data
+                         ]
+        
+
         dt = pl.concat(dataframes, how = "diagonal_relaxed")
     if dt.shape != (0, 0):
         return dt, object_key
@@ -99,7 +104,7 @@ def load_data_to_s3_as_parquet(
             filename, compression="gzip"
         )  # get a copy in local for the loading part in the database
         s3_client.write_object(object_key= filename, data=buffer.getvalue())
-        print(f"Successfully uploaded {filename} to {s3_client.bucket_name}.")
+        #print(f"Successfully uploaded {filename} to {s3_client.bucket_name}.")
         Path(old_filename).unlink()
     except Exception as e:
         print(f"Error uploading Polars DataFrame to S3: {e}")

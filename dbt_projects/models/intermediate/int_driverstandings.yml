@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: int_driverstandings
+    description: "Intermediate table to calculate driver standings, determine the season's champion based on points"
+    
+    columns:
+      - name: season
+        description: "Racing season year"
+      - name: total_race_count
+        description: "The number of the race in the season"
+      - name: driver_position
+        description: "Driver's position in the standings"
+      - name: driver_points
+        description: "Total points accumulated by the driver"
+      - name: driver_wins
+        description: "Total number of wins by the driver"
+      - name: driver_id
+        description: "Unique identifier for the driver"
+      - name: constructor_id
+        description: "Unique identifier for the constructor"
+      - name: driver_champion
+        description: "Flag (1 or 0) indicating if the driver is the season champion"
+
+    config:
+      materialized: ephemeral
+      unique_key: ["season", "driver_id", constructor_id]
+      
+      partition_by:
+        field: "season"
+        data_type: "int64"
+        range:
+          start: 1950
+          end: 2050
+          interval: 1
+        
+      cluster_by: ["round"]
+
