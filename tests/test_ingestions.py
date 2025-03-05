@@ -7,7 +7,7 @@ from pathlib import Path
 # ---------- Fixtures ----------
 @pytest.fixture(scope="module")
 def f1_api():
-    """Single instance of F1API with cleanup"""
+    """Single instance of F1API"""
     api = F1API()
     return api
 
@@ -23,6 +23,8 @@ def race_round(request):
     ("results", "season"),
     ("qualifying", "season"),
     ("sprint", "season"),
+    ("driverstandings", "season"),
+    ("constructorstandings", "season"),
     ("laps", "race"),
     ("pitstops", "race")
 ], ids=lambda p: f"{p[0]}-{p[1]}")
@@ -43,13 +45,7 @@ def expected_data(category_type):
 def api_url(category_type, f1_api, season, race_round):
     category, data_type = category_type
     
-    if data_type == "season":
-        return f1_api.base_url_season_result(
-            category=category,
-            season=season
-        )
-    elif data_type == "race":
-        return f1_api.base_url_race_data(
+    f1_api.base_url_data(
             category=category,
             season=season,
             race_round=race_round
