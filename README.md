@@ -5,6 +5,7 @@ This project focuses on collecting, processing, and analyzing Formula 1 🏁 dat
 ## 📂 Table of Contents
 
 - [Project Overview](#project-overview)
+- [Setup](#setup)
 - [Features](#features)
 - [Usage](#usage)
 - [Project Workflow](#project-workflow)
@@ -19,7 +20,14 @@ Formula 1 generates vast amounts of data, from race results to lap times. This p
 ### 1. Development Environment
 This project comes with a **devcontainer**, making the setup process seamless. By using the provided development container, all necessary dependencies will be pre-installed.
 
-### 2. Environment Variables
+### 2. Python dependancies
+After setting up the devcontainer, open the terminal and run the following command: 
+
+```bash
+poetry install --no-root
+```
+
+### 3. Environment Variables
 Before running the project, ensure that you set up the required environment variables. These can be found in the `.env-example` file. Copy this file and rename it to `.env`, then update the values accordingly.
 
 #### AWS Access
@@ -36,7 +44,7 @@ BQ_DATASET = "your_bigquery_dataset"
 SERVICE_ACCOUNT_JSON_PATH = "/config/service_account.json"
 ```
 
-### 3. GCP Service Account Key
+### 4. GCP Service Account Key
 
 To access Google Cloud resources, you'll need a GCP Service Account JSON key. Place the downloaded JSON key file inside the /config/ directory and ensure that the path matches the SERVICE_ACCOUNT_JSON_PATH variable in your .env file.
 
