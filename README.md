@@ -14,6 +14,34 @@ This project focuses on collecting, processing, and analyzing Formula 1 🏁 dat
 
 Formula 1 generates vast amounts of data, from race results to lap times. This project collects, processes, and loads this data into a structured data warehouse, making it easier to extract insights and build meaningful visualizations.
 
+## Setup
+
+### 1. Development Environment
+This project comes with a **devcontainer**, making the setup process seamless. By using the provided development container, all necessary dependencies will be pre-installed.
+
+### 2. Environment Variables
+Before running the project, ensure that you set up the required environment variables. These can be found in the `.env-example` file. Copy this file and rename it to `.env`, then update the values accordingly.
+
+#### AWS Access
+```ini
+AWS_ACCESS_KEY = "your_aws_access_key"
+AWS_SECRET_KEY = "your_aws_secret_key"
+s3_bucket = "your_s3_bucket_name"
+aws_region = "your_aws_region"
+```
+#### BigQuery Access
+```ini
+BQ_PROJECT = "your_bigquery_project"
+BQ_DATASET = "your_bigquery_dataset"
+SERVICE_ACCOUNT_JSON_PATH = "/config/service_account.json"
+```
+
+### 3. GCP Service Account Key
+
+To access Google Cloud resources, you'll need a GCP Service Account JSON key. Place the downloaded JSON key file inside the /config/ directory and ensure that the path matches the SERVICE_ACCOUNT_JSON_PATH variable in your .env file.
+
+
+
 ## 🚀 Features
 
 - 📥 **Comprehensive Data Collection**: Retrieves F1 🏎️ data from the Jolpica API, including race results, sprint results, qualifications, championship standings, pit stop data, and lap times.
