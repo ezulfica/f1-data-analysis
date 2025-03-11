@@ -15,6 +15,11 @@ This project focuses on collecting, processing, and analyzing Formula 1 🏁 dat
 
 Formula 1 generates vast amounts of data, from race results to lap times. This project collects, processes, and loads this data into a structured data warehouse, making it easier to extract insights and build meaningful visualizations.
 
+This project relies on data from the [Jolpica F1 API](https://github.com/jolpica/jolpica-f1).  
+Big thanks to the contributors of the Jolpica F1 repository for making this data accessible! 🚀  
+
+For more details, check out their repo: [jolpica/jolpica-f1](https://github.com/jolpica/jolpica-f1).
+
 ## Setup
 ### 1. Environment Variables
 
