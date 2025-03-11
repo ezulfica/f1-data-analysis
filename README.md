@@ -5,6 +5,7 @@ This project focuses on collecting, processing, and analyzing Formula 1 🏁 dat
 ## 📂 Table of Contents
 
 - [Project Overview](#project-overview)
+- [Setup](#setup)
 - [Features](#features)
 - [Usage](#usage)
 - [Project Workflow](#project-workflow)
@@ -15,8 +16,8 @@ This project focuses on collecting, processing, and analyzing Formula 1 🏁 dat
 Formula 1 generates vast amounts of data, from race results to lap times. This project collects, processes, and loads this data into a structured data warehouse, making it easier to extract insights and build meaningful visualizations.
 
 ## Setup
-
 ### 1. Environment Variables
+
 Before running the project, ensure that you set up the required environment variables. These can be found in the `.env-example` file. Copy this file and rename it to `.env`, then update the values accordingly.
 
 #### AWS Access
@@ -32,9 +33,7 @@ BQ_PROJECT = "your_bigquery_project"
 BQ_DATASET = "your_bigquery_dataset"
 SERVICE_ACCOUNT_JSON_PATH = "/config/service_account.json"
 ```
-
 #### GCP Service Account Key
-
 To access Google Cloud resources, you'll need a GCP Service Account JSON key. Place the downloaded JSON key file inside the /config/ directory and ensure that the path matches the SERVICE_ACCOUNT_JSON_PATH variable in your .env file.
 
 ### 2. Development Environment
