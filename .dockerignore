@@ -1,14 +1,21 @@
-.venv
-.vsocde/*
-data_ingestion/src/__pycache__/*
-data_ingestion/__pycache__/*
-utils/__pycache__/*
-data_prep/src/__pycache__/*
-raw/*
-data_prep/__pycache__/*
-prep/*
-prep copy/*
-data_load_into_bigquery/__pycache__/*
-logs/*
-dags/__pycache__/*
+# VS Code settings
+.vscode/
+
+# Python cache
+**/__pycache__/
+
+# Pytest cache
+.pytest_cache
+
+# Raw data and generated files
+raw*/
+prep*/
+
+# Logs and configs
+logs/
+
+# DBT projects
+dbt_projects/profiles.yml
+
+# Scripts
 run.sh

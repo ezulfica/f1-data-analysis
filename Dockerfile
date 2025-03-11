@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # 9. Expose the default Airflow webserver port
-EXPOSE 8080
+EXPOSE 9090
 
 # 10. Set entrypoint to manage Airflow services
 ENTRYPOINT ["/entrypoint.sh"]

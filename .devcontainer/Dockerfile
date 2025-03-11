@@ -31,7 +31,7 @@ WORKDIR /workspace
 COPY . /workspace/
 
 # # Ensure Poetry installs dependencies
-RUN poetry install --no-root
+# RUN poetry install --no-root
 
 # Set default command
 CMD ["bash"]

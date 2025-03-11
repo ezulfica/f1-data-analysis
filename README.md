@@ -16,10 +16,7 @@ Formula 1 generates vast amounts of data, from race results to lap times. This p
 
 ## Setup
 
-### 1. Development Environment
-This project comes with a **devcontainer**, making the setup process seamless. By using the provided development container, all necessary dependencies will be pre-installed.
-
-### 2. Environment Variables
+### 1. Environment Variables
 Before running the project, ensure that you set up the required environment variables. These can be found in the `.env-example` file. Copy this file and rename it to `.env`, then update the values accordingly.
 
 #### AWS Access
@@ -36,10 +33,45 @@ BQ_DATASET = "your_bigquery_dataset"
 SERVICE_ACCOUNT_JSON_PATH = "/config/service_account.json"
 ```
 
-### 3. GCP Service Account Key
+#### GCP Service Account Key
 
 To access Google Cloud resources, you'll need a GCP Service Account JSON key. Place the downloaded JSON key file inside the /config/ directory and ensure that the path matches the SERVICE_ACCOUNT_JSON_PATH variable in your .env file.
 
+### 2. Development Environment
+This project comes with a **devcontainer**, making the setup process seamless. By using the provided development container, all necessary dependencies will be pre-installed.
+
+### 3. App Image
+
+You can build and run the application using a Docker image. Follow these steps:
+
+1. **Build the Docker Image**:
+   First, you can build the Docker image. In the terminal, run the following command from the root directory of the project:
+   ```bash
+   docker build -t your-image-name .
+   ```
+
+2. **Modify Airflow Admin Access & Route Port**:
+   - The application’s configuration, including the Airflow admin access and the exposed route port, can be customized in the `entrypoint.sh` script. Modify these values as needed for your setup.
+     - **Airflow Admin Access**: Set the admin credentials for the Airflow UI.
+     - **Route Port**: Adjust the port on which the application will be accessible.
+
+3. **Build and Run the Container with the `run.sh` Script**:
+   If you prefer to automate the process of building and running the Docker container, you can use the `run.sh` script. The script will handle the permissions and execution of the container with the correct environment variables.
+
+   - First, ensure the script has execution permissions:
+     ```bash
+     sudo chmod +x run.sh
+     ```
+
+   - Then, execute the script to build and run the Docker container:
+     ```bash
+     ./run.sh
+     ```
+
+   The `run.sh` script will:
+   - Build the Docker image (if it hasn't been built already).
+   - Set up the necessary environment variables and mount the required volumes.
+   - Start the container with the appropriate settings, including port exposure.
 
 
 ## 🚀 Features

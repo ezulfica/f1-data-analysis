@@ -22,6 +22,3 @@ config/f1-dataanalysis-b14aabd9fd9e.json
 
 # DBT projects
 dbt_projects/profiles.yml
-
-# Scripts
-run.sh
