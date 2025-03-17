@@ -18,6 +18,7 @@ ENV AIRFLOW__CORE__DAGS_FOLDER=/app/dags
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
+
 #Copy the rest of the application code
 COPY . /app
 
