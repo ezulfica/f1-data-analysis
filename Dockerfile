@@ -5,8 +5,14 @@ WORKDIR /app
 #Install Poetry
 RUN pip install --no-cache-dir poetry
 
+# Update the package list and install Git
+RUN apt-get update && apt-get install -y git
+
 #Copy only the dependency files first (for caching efficiency)
 COPY pyproject.toml poetry.lock /app/
+
+#Set environnement for dbt profiles directory
+ENV DBT_PROFILES_DIR=/app/dbt_projects
 
 #Set environment variables for Airflow (hide absolute paths)
 ENV AIRFLOW_HOME=/opt/airflow

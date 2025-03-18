@@ -14,8 +14,5 @@ prep*/
 # Logs and configs
 logs/
 
-# DBT projects
-dbt_projects/profiles.yml
-
 # Scripts
 run.sh
