@@ -9,26 +9,26 @@ models:
         description: "Racing season year"
       - name: round
         description: "Race round within the season"
-      - name: ConstructorStandings_position
+      - name: position
         description: "Constructor's position in the standings"
-      - name: ConstructorStandings_positionText
+      - name: position_text
         description: "Text representation of the constructor's position"
-      - name: ConstructorStandings_points
+      - name: points
         description: "Total points accumulated by the constructor"
-      - name: ConstructorStandings_wins
+      - name: wins
         description: "Total number of wins by the constructor"
-      - name: ConstructorStandings_Constructor_constructorId
+      - name: constructor_id
         description: "Unique constructor identifier"
-      - name: ConstructorStandings_Constructor_url
+      - name: constructor_url
         description: "Constructor's official URL"
-      - name: ConstructorStandings_Constructor_name
+      - name: constructor_name
         description: "Name of the constructor"
-      - name: ConstructorStandings_Constructor_nationality
+      - name: constructor_nationality
         description: "Nationality of the constructor"
 
     config:
       materialized: incremental
-      unique_key: ["season", "round", "ConstructorStandings_Constructor_constructorId"]
+      unique_key: ["season", "round", "constructor_id"]
       
       partition_by:
         field: "season"
@@ -38,4 +38,4 @@ models:
           end: 2050
           interval: 1
           
-      # cluster_by: ["round", "ConstructorStandings_position"]
+      # cluster_by: ["round", "position"]
