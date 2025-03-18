@@ -43,6 +43,11 @@ def load_and_concat(folder: str) -> dict:
 def convert_pandas_df(df: pd.DataFrame, schema_json: dict) -> pd.DataFrame:
     # Apply type conversions
     for col, dtype in schema_json.items():
+
+        if col not in df.columns:
+            print(f"Warning: Column '{col}' is missing. Adding it with NULL values.")
+            df[col] = pd.NA  # Add column with NULL values
+
         try:
             if dtype == "INTEGER":
                 # Convert non-numeric values to NaN and then to Int64

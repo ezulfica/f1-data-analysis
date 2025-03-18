@@ -180,7 +180,7 @@
     "round": "INTEGER",
     "DriverStandings_position": "INTEGER",
     "DriverStandings_positionText": "STRING",
-    "DriverStandings_points": "STRING",
+    "DriverStandings_points": "FLOAT",
     "DriverStandings_wins": "INTEGER",
     "DriverStandings_Driver_driverId": "STRING",
     "DriverStandings_Driver_permanentNumber": "INTEGER",
