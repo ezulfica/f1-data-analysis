@@ -13,7 +13,7 @@ poetry_run_command = f"{poetry_shell_command} && python -m"
 data_prep_command = f"{poetry_run_command} data_prep.main"
 data_ingest_command = f"{poetry_run_command} data_ingestion.main"
 data_load_command = f"{poetry_run_command} data_load_into_bigquery.main"
-dbt_command = f"{poetry_run_command} && dbt build --project-dir dbt_projects"
+dbt_command = f"{poetry_shell_command} && dbt build --project-dir dbt_projects"
 
 
 # Step 2: Define Python function to check output and decide the next step
@@ -32,9 +32,10 @@ def check_data_collected():
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2024, 2, 1),  # Adjust based on your needs
+    "start_date": datetime(2025, 3, 25, 20),  # Adjust based on your needs
     "retries": 0,
     "retry_delay": timedelta(minutes=5),
+    'schedule_interval': '@weekly',
 }
 
 # Define DAG
