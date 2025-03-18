@@ -1,7 +1,11 @@
 SELECT 
     season,
     round AS total_race_count,
-    position AS driver_position,
+    CASE   
+        WHEN points = 0 
+        THEN MAX(position) OVER(PARTITION BY season) 
+        ELSE position
+        END AS driver_position,
     points AS driver_points,
     wins AS driver_wins,
     driver_id,

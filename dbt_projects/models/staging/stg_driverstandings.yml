@@ -9,42 +9,42 @@ models:
         description: "Racing season year"
       - name: round
         description: "Race round within the season"
-      - name: DriverStandings_position
+      - name: position
         description: "Driver's position in the standings"
-      - name: DriverStandings_positionText
+      - name: position_text
         description: "Text representation of the driver's position"
-      - name: DriverStandings_points
+      - name: points
         description: "Total points accumulated by the driver"
-      - name: DriverStandings_wins
+      - name: wins
         description: "Total number of wins by the driver"
-      - name: DriverStandings_Driver_driverId
+      - name: driver_id
         description: "Unique driver identifier"
-      - name: DriverStandings_Driver_permanentNumber
+      - name: permanent_number
         description: "Permanent driver number"
-      - name: DriverStandings_Driver_code
+      - name: driver_code
         description: "Driver's code abbreviation"
-      - name: DriverStandings_Driver_url
+      - name: driver_url
         description: "Driver's official URL"
-      - name: DriverStandings_Driver_givenName
+      - name: given_name
         description: "Driver's first name"
-      - name: DriverStandings_Driver_familyName
+      - name: family_name
         description: "Driver's last name"
-      - name: DriverStandings_Driver_dateOfBirth
+      - name: date_of_birth
         description: "Driver's date of birth"
-      - name: DriverStandings_Driver_nationality
+      - name: nationality
         description: "Nationality of the driver"
-      - name: DriverStandings_Constructors_constructorId
+      - name: constructor_id
         description: "Unique constructor identifier"
-      - name: DriverStandings_Constructors_url
+      - name: constructor_url
         description: "Constructor's official URL"
-      - name: DriverStandings_Constructors_name
+      - name: constructor_name
         description: "Name of the constructor"
-      - name: DriverStandings_Constructors_nationality
+      - name: constructor_nationality
         description: "Nationality of the constructor"
 
     config:
       materialized: incremental
-      unique_key: ["season", "round", "DriverStandings_Driver_driverId"]
+      unique_key: ["season", "round", "driver_id"]
       
       partition_by:
         field: "season"
@@ -54,4 +54,4 @@ models:
           end: 2050
           interval: 1
           
-      # cluster_by: ["round", "DriverStandings_position"]
+      # cluster_by: ["round", "position"]
