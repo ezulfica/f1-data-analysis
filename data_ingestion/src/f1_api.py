@@ -10,6 +10,11 @@ from pathlib import Path
 class F1API:
 
     def __init__(self, config_file="config/settings.yaml"):
+        """
+        Initializes the F1API instance by loading configuration settings.
+
+        :param config_file: Path to the configuration file (default is 'config/settings.yaml')
+        """
         with open(config_file) as file:
             self.settings = yaml.safe_load(file)
 
@@ -24,10 +29,13 @@ class F1API:
     
     @staticmethod
     def get_pagination_offsets(total:str) -> list:
-        """In order to get all the value from the API,
-        the offset parameters is used.
-        Offset value is a multiple of 100,
-        which is the number of races that we can fetch"""
+        """
+        Calculates the pagination offsets based on the total number of items.
+        This is useful for fetching large datasets from paginated API responses.
+
+        :param total: Total number of items (as a string) to fetch
+        :return: List of offsets (each offset is a multiple of 100)
+        """
 
         total_races = int(total)
         if total_races > 0:
@@ -38,6 +46,13 @@ class F1API:
         return offsets
     
     def build_param_url(self, url: str, total: str) -> list:
+        """
+        Generates paginated URLs for fetching data from the API.
+
+        :param url: Base URL for the API request
+        :param total: Total number of items to retrieve (used for pagination)
+        :return: List of paginated URLs
+        """
         try : 
             offsets = self.get_pagination_offsets(total)
             url_list = [f"{url}?limit=100&offset={offset}" for offset in offsets]
@@ -47,7 +62,13 @@ class F1API:
             return []
 
     def fetch_circuit_schedule(self, offset: int) -> list:
-        """Retrieve F1 circuit schedule (year and round) for a specific offset."""
+        """
+        Fetches the F1 circuit schedule (year and round) for a specific offset.
+        The offset helps paginate through multiple requests.
+
+        :param offset: The pagination offset
+        :return: List of races at a given offset (or an empty list in case of an error)
+        """
         url = f"{self.base_url}?offset={offset}&limit=100"
         try:
             sleep(0.3)
@@ -62,7 +83,14 @@ class F1API:
         return []  # Return an empty dict if there's an error
 
     def fetch_f1_seasons_schedule(self) -> list:
-        """Retrieve F1 circuit schedule (year and round) given a list of offsets."""
+        """
+        Fetches the F1 circuit schedule for the entire season, handling pagination.
+
+        This method fetches the initial response and then makes additional requests 
+        for paginated data.
+
+        :return: A list of races from the F1 season
+        """
         first_response = requests.get(self.base_url, timeout=10).json()
         total = first_response['MRData']['total']
         offsets = self.get_pagination_offsets(total)
@@ -70,12 +98,26 @@ class F1API:
         f1_list.append(first_response["MRData"]["RaceTable"]["Races"])
         self.f1_schedule = [race for races in f1_list for race in races]
 
-    def base_url_data(self, category, season, race_round=None):
-        """Generate endpoint URL for different race data."""
+    def base_url_data(self, category, season, race_round=None) -> str:
+        """
+        Builds a full URL based on category, season, and (optionally) race round.
+
+        :param category: The category of the data (e.g., 'results', 'qualifying')
+        :param season: The F1 season
+        :param race_round: The specific race round (optional)
+        :return: The complete URL to access the data
+        """
         return f"{self.base_url}{season}/{race_round + '/' if race_round else ''}{category}"
     
-    def build_base_url_data(self):
-        """Generate URLs for both race-based and season-based data."""
+    def build_base_url_data(self) -> list:
+        """
+        Builds the URLs for both race-based and season-based data.
+
+        This method organizes races into groups by season and builds URLs 
+        for each race or season's data.
+
+        :return: List of dictionaries containing category, season, and URLs
+        """
         data_source = [(fone["season"], fone["round"]) for fone in self.pending_races]
         seasons = list(set(fone["season"] for fone in self.pending_races))
         
@@ -107,13 +149,24 @@ class F1API:
         
         return results_url
     
-    def fetch_data(self):
+    def fetch_data(self) -> None:
+        """
+        Fetches race data for all required categories and seasons.
+        
+        This method iterates over all parameters and fetches the necessary data 
+        using the `build_race_data` method for each set of parameters.
+        """
         params = self.build_base_url_data()
         data = [self.build_race_data(param)
                 for param in tqdm(params, desc="fetching races data")
         ]
     
-    def build_race_data(self, params: dict):
+    def build_race_data(self, params: dict) -> None:
+        """
+        Builds and saves race data based on the provided parameters.
+
+        :param params: A dictionary containing the category, season, and URLs to fetch data
+        """
         urls = params["urls"]
         season = params["season"]
         category = params["category"]
@@ -131,8 +184,13 @@ class F1API:
 
         self.save_data_to_file(filename, merged_data)
 
-    def fetch_initial_responses(self, urls):
-        """Fetch initial responses from given URLs."""
+    def fetch_initial_responses(self, urls: list) -> list:
+        """
+        Fetches initial responses from the given list of URLs.
+
+        :param urls: A list of URLs to fetch data from
+        :return: List of successful responses
+        """
         responses = []
         for url in urls:
             try:
@@ -145,8 +203,13 @@ class F1API:
                 logging.error(f"Failed to fetch data from {url}: {e}")
         return responses
 
-    def get_additional_urls(self, first_responses):
-        """Generate additional paginated URLs based on initial responses."""
+    def get_additional_urls(self, first_responses:list) -> list:
+        """
+        Generates additional paginated URLs based on the initial responses.
+
+        :param first_responses: A list of the first responses from the API
+        :return: A list of URLs for additional pages of data
+        """
         return [
             offset
             for response in first_responses
@@ -155,8 +218,13 @@ class F1API:
                 )
         ]
 
-    def fetch_additional_data(self, url_params):
-        """Fetch additional paginated data."""
+    def fetch_additional_data(self, url_params: list) -> list:
+        """
+        Fetches additional data from paginated URLs.
+
+        :param url_params: A list of paginated URLs to fetch additional data from
+        :return: A list of additional data fetched from the URLs
+        """
         additional_data = []
         for url in url_params:
             sleep(0.3)

@@ -7,13 +7,31 @@ from pathlib import Path
 from utils.s3_client import S3Client
 
 
-def file_to_prep(directory: str):
+def file_to_prep(directory: str) -> list:
+    """
+    Scans a directory recursively and returns a list of all JSON files.
+
+    Args:
+        directory (str): Path to the directory.
+
+    Returns:
+        list: List of file paths with a .json extension.
+    """
     path_ = list(Path(directory).rglob("*"))
     return [str(filename) for filename in path_ if filename.suffix == ".json"]
 
 
 def data_loading_concurrency(s3_client: S3Client, files: list) -> None:
+    """
+    Processes multiple JSON files concurrently and uploads them to S3 after transformation.
 
+    Args:
+        s3_client (S3Client): An instance of the S3 client.
+        files (list): List of file paths to process.
+
+    Returns:
+        str: Completion message.
+    """
     num_files = len(files)
 
     with tqdm(total=num_files) as pbar:
@@ -28,6 +46,13 @@ def data_loading_concurrency(s3_client: S3Client, files: list) -> None:
 
 
 def prep_data_into_s3(s3_client: S3Client, object_key: str) -> None:
+    """
+    Reads, transforms, and uploads a JSON file to S3 in Parquet format.
+
+    Args:
+        s3_client (S3Client): S3 client for uploading files.
+        object_key (str): File path of the JSON object.
+    """
     try:
         dt, filename = read_object_into_table(object_key)
         new_filename = filename.replace("raw", "prep").replace("json", "parquet")
@@ -40,6 +65,15 @@ def prep_data_into_s3(s3_client: S3Client, object_key: str) -> None:
 
 
 def read_object_into_table(object_key: str) -> tuple:
+    """
+    Reads a JSON file into a Polars DataFrame, processing F1 race data.
+
+    Args:
+        object_key (str): Path to the JSON file.
+
+    Returns:
+        tuple: A Polars DataFrame and the object key (filename).
+    """
     with open(object_key, "r") as file:
         data = json.load(file)
     # dt = pl.concat([pl.DataFrame(dt["MRData"]["RaceTable"]["Races"]) for dt in data])
@@ -57,8 +91,17 @@ def read_object_into_table(object_key: str) -> tuple:
         return dt, object_key
 
 
-def recursive_unnest_explode(df: pl.DataFrame, parent_prefix="") -> pl.DataFrame:
+def recursive_unnest_explode(df: pl.DataFrame, parent_prefix: str = "") -> pl.DataFrame:
+    """
+    Recursively unnests (flattens) struct columns and explodes list columns in a Polars DataFrame.
 
+    Args:
+        df (pl.DataFrame): Input Polars DataFrame.
+        parent_prefix (str, optional): Prefix for nested column names. Defaults to "".
+
+    Returns:
+        pl.DataFrame: Transformed DataFrame with nested structures flattened.
+    """
     # Identify struct (nested dict) and list (array) columns
     struct_cols = [col for col in df.columns if isinstance(df[col].dtype, pl.Struct)]
     list_cols = [col for col in df.columns if isinstance(df[col].dtype, pl.List)]
@@ -88,12 +131,18 @@ def load_data_to_s3_as_parquet(
     df: pl.DataFrame, s3_client: S3Client, filename: str, old_filename: str
 ) -> None:
     """
-    Write a Polars DataFrame to S3 as a Parquet file with specified compression.
+    Writes a Polars DataFrame to S3 as a Parquet file with Gzip compression.
 
-    :param bucket_name: Name of the S3 bucket
-    :param object_key: Key (path) of the object in S3
-    :param dataframe: Polars DataFrame to be written
-    :param compression: Parquet compression type (e.g., 'snappy', 'gzip', 'brotli', 'none')
+    Args:
+        df (pl.DataFrame): The DataFrame to upload.
+        s3_client (S3Client): S3 client for handling file upload.
+        filename (str): New filename (Parquet format).
+        old_filename (str): Original JSON filename (to be deleted post-upload).
+
+    Behavior:
+        - Saves a local copy of the Parquet file before uploading.
+        - Uses Gzip compression for efficient storage.
+        - Deletes the original JSON file after a successful upload.
     """
     try:
         buffer = BytesIO()
