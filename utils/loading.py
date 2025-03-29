@@ -6,13 +6,30 @@ from pathlib import Path
 
 
 def list_file(folder: str) -> list:
+    """
+    Lists all Parquet files in a given folder recursively.
+
+    Args:
+        folder (str): Path to the folder.
+
+    Returns:
+        list: A list of Path objects representing the Parquet files.
+    """
     path_ = list(Path(folder).rglob("*"))
     parquet_files = [filename for filename in path_ if filename.suffix == ".parquet"]
     return parquet_files
 
 
 def file_to_load(folder: str) -> dict:
-    # Get all files in directory recursively
+    """
+    Organizes Parquet files into a dictionary by their parent folder name.
+
+    Args:
+        folder (str): Path to the folder.
+
+    Returns:
+        dict: A dictionary where keys are folder names and values are lists of file paths.
+    """
     parquet_files = list_file(folder)
     foldernames = set([filename.parent.name for filename in parquet_files])
 
@@ -28,20 +45,45 @@ def file_to_load(folder: str) -> dict:
 
 
 def read_data_and_concat(files_to_concat: list) -> pl.DataFrame:
-    # Read all files in the list and concatenate them
+    """
+    Reads multiple Parquet files and concatenates them into a single Polars DataFrame.
+
+    Args:
+        files_to_concat (list): List of Parquet file paths.
+
+    Returns:
+        pd.DataFrame: Concatenated Pandas DataFrame.
+    """
     dfs = [pl.read_parquet(file) for file in files_to_concat]
     dfs = pl.concat(dfs, how="diagonal")
     return dfs.to_pandas()
 
 
 def load_and_concat(folder: str) -> dict:
-    # Read all files in the folder and concatenate them
+    """
+    Loads and concatenates all Parquet files from a given folder, grouping them by table.
+
+    Args:
+        folder (str): Path to the folder containing the Parquet files.
+
+    Returns:
+        dict: A dictionary where keys are table names and values are concatenated DataFrames.
+    """
     files = file_to_load(folder)
     return {table: read_data_and_concat(files[table]) for table in files.keys()}
 
 
 def convert_pandas_df(df: pd.DataFrame, schema_json: dict) -> pd.DataFrame:
-    # Apply type conversions
+    """
+    Converts a Pandas DataFrame's columns to the specified schema.
+
+    Args:
+        df (pd.DataFrame): The DataFrame to be converted.
+        schema_json (dict): A dictionary mapping column names to target data types.
+
+    Returns:
+        pd.DataFrame: The DataFrame with the specified type conversions.
+    """
     for col, dtype in schema_json.items():
 
         if col not in df.columns:
@@ -66,6 +108,17 @@ def convert_pandas_df(df: pd.DataFrame, schema_json: dict) -> pd.DataFrame:
 
 # === Load and Transform Data ===
 def load_and_transform_data(folder: str, schema_json: dict) -> dict:
+    """
+    Loads, concatenates, and transforms data according to the provided schema.
+
+    Args:
+        folder (str): Path to the folder containing data.
+        schema_json (dict): Dictionary specifying column types for transformation.
+
+    Returns:
+        dict: A dictionary of transformed DataFrames.
+    """
+    
     datasets = load_and_concat(folder)  # Load data
 
 
@@ -92,6 +145,23 @@ def load_into_bigquery(
     schema_json: dict,
     bq_client: bigquery.Client,
 ) -> None:
+    
+    """
+    Loads transformed data into BigQuery.
+
+    Args:
+        data (dict): A dictionary where keys are table names and values are Pandas DataFrames.
+        project (str): Google Cloud project ID.
+        dataset (str): BigQuery dataset name.
+        schema_json (dict): Schema definition for each table.
+        bq_client (bigquery.Client): BigQuery client instance.
+
+    Behavior:
+        - Converts the schema dictionary into BigQuery schema fields.
+        - Loads the data into BigQuery with "WRITE_TRUNCATE" mode.
+        - Handles any errors during the upload process.
+    """
+
     for table, df in data.items():
         table_id = f"{project}.{dataset}.{table}"
         schema = [
@@ -116,7 +186,17 @@ def load_into_bigquery(
             print(f"Error loading {table} into BigQuery ❌: {e}")
 
 
-def delete_local_files(folder: str):
+def delete_local_files(folder: str) -> None:
+    """
+    Deletes all Parquet files in the specified folder after processing.
+
+    Args:
+        folder (str): Path to the folder containing the files.
+
+    Returns:
+        list: A list of deleted files.
+    """
+
     return [
         file.unlink() for file in list_file(folder)
     ]  # delete the files after loading

@@ -1,28 +1,32 @@
 {
-  "name": "Python3",
+  "name": "F1-Data: Python3",
   "build": {
     "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:1": {}
   },
   "workspaceFolder": "/workspace/",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "customizations": {
     "vscode": {
       "settings": {
-        "python.defaultInterpreterPath": "/usr/local/bin/python3",
         "python.linting.enabled": true,
         "python.linting.pylintEnabled": true,
         "python.linting.flake8Enabled": true
       },
       "extensions": [
         "ms-python.python",
-        "ms-toolsai.jupyter",
         "esbenp.prettier-vscode",
         "timonwong.shellcheck",
         "dbt-labs.dbt",
-        "pappasam.poetry"
+        "pappasam.poetry",
+        "tamasfe.even-better-toml",
+				"matangover.mypy",
+				"charliermarsh.ruff",
+				"ms-toolsai.jupyter",
+				"njpwerner.autodocstring",
       ]
     }
-  },
-  // "postCreateCommand": "poetry install",
-  // "remoteUser": "vscode"
+  }
 }

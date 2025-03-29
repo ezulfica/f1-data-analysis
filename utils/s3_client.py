@@ -11,12 +11,15 @@ class S3Client:
         aws_secret_access_key: str = None,
         region_name: str = None,
         bucket_name: str = None,
-    ):
+    ) -> None: 
         """
-        Initialize the S3 client.
-        :param aws_access_key_id: AWS access key ID
-        :param aws_secret_access_key: AWS secret access key
-        :param region_name: AWS region name
+        Initialize the S3 client with AWS credentials and target bucket name.
+
+        Args:
+            aws_access_key_id (str, optional): AWS access key ID. Defaults to None.
+            aws_secret_access_key (str, optional): AWS secret access key. Defaults to None.
+            region_name (str, optional): AWS region name. Defaults to None.
+            bucket_name (str, optional): Name of the S3 bucket to interact with. Defaults to None.
         """
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_access_key = aws_secret_access_key
@@ -24,9 +27,12 @@ class S3Client:
         self.s3_client = None
         self.bucket_name = bucket_name
 
-    def connect(self):
+    def connect(self) -> None:
         """
-        Establishes a connection to the S3 service.
+        Establishes a connection to AWS S3 using the provided credentials.
+        
+        Tries to create an S3 client and connect to the AWS S3 service. 
+        If the connection fails due to missing or incorrect credentials, an error is raised.
         """
         try:
             self.s3_client = boto3.client(
@@ -40,12 +46,17 @@ class S3Client:
             print(f"Error connecting to S3: {e}")
             raise
 
-    def read_object(self, object_key):
+    def read_object(self, object_key: str) -> bytes | None:
         """
-        Read an object from S3.
-        :param bucket_name: Name of the S3 bucket
-        :param object_key: Key (path) of the object
-        :return: Object content as bytes
+        Reads an object from an S3 bucket.
+
+        Args:
+            object_key (str): The key (path) of the object to be read.
+
+        Returns:
+            bytes: The content of the object as bytes.
+        
+        If there is an error reading the object, prints the error and returns None.
         """
         try:
             response = self.s3_client.get_object(
@@ -58,12 +69,16 @@ class S3Client:
             )
             return None
 
-    def write_object(self, object_key, data):
+    def write_object(self, object_key: str, data: bytes | str) -> None:
         """
-        Write an object to S3.
-        :param bucket_name: Name of the S3 bucket
-        :param object_key: Key (path) of the object
-        :param data: Data to write (bytes or string)
+        Uploads an object to an S3 bucket.
+
+        Args:
+            object_key (str): The key (path) where the object will be stored in S3.
+            data (bytes or str): Data to be uploaded to S3. Can be in bytes or string format.
+        
+        If the data is a string, it is encoded as UTF-8 before uploading. 
+        If an error occurs during upload, it is printed to the console.
         """
         try:
             if isinstance(data, str):
@@ -79,10 +94,16 @@ class S3Client:
 
     def list_objects(self, prefix: str) -> None:
         """
-        List all objects in an S3 bucket with the given prefix using pagination.
+        List all objects in the S3 bucket with the specified prefix using pagination.
 
-        :param prefix: Prefix of the S3 objects to list
-        :return: List of object keys
+        Args:
+            prefix (str): Prefix of the object keys to list.
+        
+        Returns:
+            list: A list of object keys in the S3 bucket that match the prefix.
+        
+        This method handles pagination to list large numbers of objects. 
+        If there are no matching objects, it returns an empty list and prints a message.
         """
         try:
             paginator = self.s3_client.get_paginator("list_objects_v2")

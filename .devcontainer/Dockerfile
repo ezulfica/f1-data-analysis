@@ -16,22 +16,25 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # # Install Poetry
-# RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.2
 
-# Install Poetry
-RUN pip install poetry
+#Set environnement for dbt profiles directory
+ENV DBT_PROFILES_DIR=/app/dbt_projects
 
 # Set up environment variables
-ENV PATH="/root/.local/bin:${PATH}"
+ENV PATH="${HOME}/.local/bin:${PATH}"
 
 # Set working directory (This should match where the project will be copied)
 WORKDIR /workspace
 
+# #Copy only the dependency files first (for caching efficiency)
+# COPY pyproject.toml poetry.lock /workspace/
+
 # Copy the project files from your local machine into the container
 COPY . /workspace/
 
-# # Ensure Poetry installs dependencies
+# Ensure Poetry installs dependencies
 # RUN poetry install --no-root
 
 # Set default command
-CMD ["bash"]
+CMD ["bash", "entrypoint.sh"]
