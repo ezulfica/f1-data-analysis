@@ -1,8 +1,17 @@
 import yaml
 import os
+from pathlib import Path
+from dotenv import dotenv_values
+
+_ENV_PATH = Path(__file__).parent.parent / "config" / ".env"
 
 
-def load_settings(path: str) -> dict: 
+def get_config() -> dict:
+    """Loads credentials and settings from config/.env."""
+    return dotenv_values(_ENV_PATH)
+
+
+def load_settings(path: str) -> dict:
     """
     Loads configuration settings from a YAML file.
 
@@ -12,13 +21,13 @@ def load_settings(path: str) -> dict:
     Returns:
         dict: The parsed settings as a dictionary.
     """
-        
+
     with open(path) as file:
         settings = yaml.safe_load(file)
     return settings
 
 
-def get_all_file_paths(directory: str) -> list: 
+def get_all_file_paths(directory: str) -> list:
     """
     Retrieves a list of all file paths within a given directory and its subdirectories.
 
@@ -34,7 +43,3 @@ def get_all_file_paths(directory: str) -> list:
         for file in files:
             file_paths.append(os.path.join(root, file))
     return file_paths
-
-
-# Example usage
-all_files = get_all_file_paths("raw/")

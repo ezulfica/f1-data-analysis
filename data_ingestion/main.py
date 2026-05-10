@@ -1,8 +1,8 @@
 import logging
-from dotenv import dotenv_values
 from data_ingestion.src.f1_api import F1API  # Absolute import
 from utils.s3_utils import connect_s3, upload_results
 from utils.ingestion import fetch_f1_schedule, process_race_data
+from utils.config import get_config
 
 # Set up logging
 logging.basicConfig(
@@ -10,14 +10,13 @@ logging.basicConfig(
 )
 
 # Constants
-CONFIG_PATH = "config/.env"
 LOOKBACK_DAYS = 5
 
 
 # main function
 def main():
     """Main execution function."""
-    config = dotenv_values(CONFIG_PATH)
+    config = get_config()
     s3_client = connect_s3(config)
     f1_api = F1API()
     fetch_f1_schedule(s3_client, config, f1_api)

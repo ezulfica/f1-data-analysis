@@ -1,16 +1,14 @@
 from google.cloud import bigquery
-from dotenv import dotenv_values
 from utils.loading import (
     load_and_transform_data,
     load_into_bigquery,
     delete_local_files,
 )
+from utils.config import get_config
 import json
 
 # === CONFIGURATION ===
-CONFIG_PATH = "config/.env"
-SETTINGS_PATH = "config/settings.yaml"
-config = dotenv_values(CONFIG_PATH)
+config = get_config()
 
 BQ_PROJECT = config["BQ_PROJECT"]
 BQ_DATASET = config["BQ_DATASET"]

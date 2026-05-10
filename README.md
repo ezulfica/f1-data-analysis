@@ -23,23 +23,39 @@ For more details, check out their repo: [jolpica/jolpica-f1](https://github.com/
 ## Setup
 ### 1. Environment Variables
 
-Before running the project, ensure that you set up the required environment variables. These can be found in the `.env-example` file. Copy this file and rename it to `.env`, then update the values accordingly.
+Copy `.env-example` to `.env` and fill in your values:
 
-#### AWS Access
-```ini
-AWS_ACCESS_KEY = "your_aws_access_key"
-AWS_SECRET_KEY = "your_aws_secret_key"
-s3_bucket = "your_s3_bucket_name"
-aws_region = "your_aws_region"
+```bash
+cp config/.env-example config/.env
 ```
-#### BigQuery Access
+
 ```ini
-BQ_PROJECT = "your_bigquery_project"
-BQ_DATASET = "your_bigquery_dataset"
-SERVICE_ACCOUNT_JSON_PATH = "/config/service_account.json"
+# AWS — S3 landing zone
+AWS_ACCESS_KEY=your_aws_access_key
+AWS_SECRET_KEY=your_aws_secret_key
+s3_bucket=your_bucket_name
+aws_region=eu-west-3
+
+# Google BigQuery
+BQ_PROJECT=your_gcp_project_id
+BQ_DATASET=your_dataset_name
+
+# GCP Service Account (see below)
+SERVICE_ACCOUNT_JSON_PATH=/home/<your-user>/.gcp/f1-dataanalysis-sa.json
 ```
-#### GCP Service Account Key
-To access Google Cloud resources, you'll need a GCP Service Account JSON key. Place the downloaded JSON key file inside the /config/ directory and ensure that the path matches the SERVICE_ACCOUNT_JSON_PATH variable in your .env file.
+
+### 2. GCP Service Account Key
+
+Download your GCP service account JSON key from the Google Cloud Console and place it **outside the project directory** to avoid accidental commits:
+
+```bash
+mkdir -p ~/.gcp
+mv ~/Downloads/your-service-account.json ~/.gcp/f1-dataanalysis-sa.json
+```
+
+Then set `SERVICE_ACCOUNT_JSON_PATH` in your `.env` to the absolute path of that file.
+
+> The `config/` directory is gitignored for `*.json` files, but keeping secrets outside the repo is the safer convention.
 
 ### 2. Development Environment
 This project comes with a **devcontainer**, making the setup process seamless. By using the provided development container, all necessary dependencies will be pre-installed.
