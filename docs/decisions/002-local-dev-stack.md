@@ -49,13 +49,42 @@ LocalStack (community, gratuit) émule S3, IAM, Lambda et EventBridge localement
 
 `boto3` pointe vers LocalStack via `S3_ENDPOINT_URL=http://localstack:4566`. En prod, cette variable est absente → boto3 utilise le vrai AWS.
 
-### 2. DuckDB pour l'émulation BigQuery (dbt)
+### 2. DuckDB comme émulation BigQuery (dbt)
 
-Le profil dbt `local` (dans `local/dbt/profiles.yml`) pointe vers un fichier DuckDB au lieu de BigQuery.
+#### Stratégie des profils
 
-**Pourquoi pas PostgreSQL ?** BigQuery et DuckDB ont une meilleure compatibilité SQL analytique. DuckDB ne nécessite pas de serveur séparé.
+Trois targets dbt couvrent les trois environnements :
 
-La variable `DBT_TARGET` contrôle le target utilisé par le DAG Airflow (défaut : `dev`).
+| Target | Type | Profil | Quand |
+|--------|------|--------|-------|
+| `local` | DuckDB | `local/dbt/profiles.yml` | docker-compose, CI |
+| `dev` | BigQuery | `dbt_projects/profiles.yml` | dataset `staging` sur GCP |
+| `prod` | BigQuery | `dbt_projects/profiles.yml` | dataset prod sur GCP (à créer) |
+
+La variable `DBT_TARGET` contrôle le target utilisé par le DAG Airflow (défaut : `dev`). Localement : `DBT_TARGET=local`.
+
+DuckDB fonctionne en mode **embarqué** — pas de serveur séparé. Le fichier `.duckdb` est persisté dans un bind mount (`./local/duckdb/`) accessible depuis le host pour inspection directe (DBeaver, notebooks).
+
+**Pourquoi pas PostgreSQL ?** DuckDB a une compatibilité SQL analytique bien supérieure avec BigQuery (window functions, `QUALIFY`, `STRUCT`, types analytiques). PostgreSQL nécessiterait de réécrire davantage de modèles.
+
+#### Compatibilité SQL DuckDB ↔ BigQuery
+
+DuckDB couvre l'essentiel du SQL analytique BigQuery, mais certaines constructions diffèrent :
+
+| Construct | BigQuery | DuckDB | Stratégie |
+|-----------|----------|--------|-----------|
+| Types numériques | `FLOAT64`, `INT64` | `DOUBLE`, `BIGINT` | Géré par les adapters dbt |
+| `DATE_DIFF` | `DATE_DIFF(d1,d2,DAY)` | `datediff('day',d1,d2)` | Macro cross-adapter |
+| `FORMAT_DATE` | `FORMAT_DATE('%Y',d)` | `strftime(d,'%Y')` | Macro cross-adapter |
+| `SAFE_DIVIDE` | natif | non natif | Macro cross-adapter |
+| `GENERATE_DATE_ARRAY` | natif | non natif | Macro cross-adapter si besoin |
+| `SELECT * EXCEPT(col)` | natif | non supporté | À éviter dans les modèles |
+| Window functions | ✓ | ✓ | Aucun ajustement |
+| `QUALIFY` | ✓ | ✓ | Aucun ajustement |
+
+**Stratégie de compatibilité** : les fonctions BigQuery-spécifiques sont encapsulées dans des macros dbt (`macros/compat/`) qui dispatchent vers l'implémentation correcte selon `{{ target.type }}`. Les modèles utilisent `{{ safe_divide(a, b) }}` au lieu de la syntaxe native.
+
+Un audit des 22 modèles existants est nécessaire avant de valider la compatibilité complète (étape à venir sur cette branche ou une branche dédiée).
 
 ### 3. docker-compose.yml comme stack de développement
 
