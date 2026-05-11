@@ -13,7 +13,8 @@ poetry_run_command = f"{poetry_shell_command} && python -m"
 data_prep_command = f"{poetry_run_command} data_prep.main"
 data_ingest_command = f"{poetry_run_command} data_ingestion.main"
 data_load_command = f"{poetry_run_command} data_load_into_bigquery.main"
-dbt_command = f"{poetry_shell_command} && dbt build --project-dir dbt_projects"
+dbt_target = os.environ.get("DBT_TARGET", "dev")
+dbt_command = f"{poetry_shell_command} && dbt build --project-dir dbt_projects --target {dbt_target}"
 
 
 # Step 2: Define Python function to check output and decide the next step

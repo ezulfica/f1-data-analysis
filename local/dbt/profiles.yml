@@ -1,0 +1,7 @@
+f1_data_transformation:
+  target: local
+  outputs:
+    local:
+      type: duckdb
+      path: /app/duckdb/f1_dev.duckdb
+      threads: 4

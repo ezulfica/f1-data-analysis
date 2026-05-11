@@ -11,7 +11,8 @@ class S3Client:
         aws_secret_access_key: str = None,
         region_name: str = None,
         bucket_name: str = None,
-    ) -> None: 
+        endpoint_url: str = None,
+    ) -> None:
         """
         Initialize the S3 client with AWS credentials and target bucket name.
 
@@ -20,18 +21,20 @@ class S3Client:
             aws_secret_access_key (str, optional): AWS secret access key. Defaults to None.
             region_name (str, optional): AWS region name. Defaults to None.
             bucket_name (str, optional): Name of the S3 bucket to interact with. Defaults to None.
+            endpoint_url (str, optional): Custom endpoint URL (e.g. LocalStack). Defaults to None.
         """
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_access_key = aws_secret_access_key
         self.region_name = region_name
         self.s3_client = None
         self.bucket_name = bucket_name
+        self.endpoint_url = endpoint_url
 
     def connect(self) -> None:
         """
         Establishes a connection to AWS S3 using the provided credentials.
-        
-        Tries to create an S3 client and connect to the AWS S3 service. 
+
+        Tries to create an S3 client and connect to the AWS S3 service.
         If the connection fails due to missing or incorrect credentials, an error is raised.
         """
         try:
@@ -40,6 +43,7 @@ class S3Client:
                 aws_access_key_id=self.aws_access_key_id,
                 aws_secret_access_key=self.aws_secret_access_key,
                 region_name=self.region_name,
+                endpoint_url=self.endpoint_url,
             )
             print("Connected to S3 successfully.")
         except (NoCredentialsError, PartialCredentialsError) as e:

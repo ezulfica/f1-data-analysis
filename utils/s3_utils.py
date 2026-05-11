@@ -24,6 +24,7 @@ def connect_s3(config: dict) -> S3Client:
         aws_secret_access_key=config["AWS_SECRET_KEY"],
         region_name=config["aws_region"],
         bucket_name=config["s3_bucket"],
+        endpoint_url=config.get("S3_ENDPOINT_URL"),
     )
     s3_client.connect()
     return s3_client

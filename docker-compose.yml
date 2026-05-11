@@ -1,0 +1,50 @@
+services:
+
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,iam,lambda,events
+      - AWS_DEFAULT_REGION=eu-west-3
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - LOCALSTACK_HOST=localstack
+    volumes:
+      - ./localstack/init-scripts:/etc/localstack/init/ready.d
+      - localstack-data:/var/lib/localstack
+    networks:
+      - f1-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  airflow:
+    build: .
+    depends_on:
+      localstack:
+        condition: service_healthy
+    env_file:
+      - config/.env.local
+    environment:
+      - S3_ENDPOINT_URL=http://localstack:4566
+      - DBT_TARGET=local
+      - DBT_PROFILES_DIR=/app/local/dbt
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./dbt_projects:/app/dbt_projects
+      - ./local/dbt:/app/local/dbt
+      - duckdb-data:/app/duckdb
+    networks:
+      - f1-network
+
+networks:
+  f1-network:
+    driver: bridge
+
+volumes:
+  localstack-data:
+  duckdb-data:
