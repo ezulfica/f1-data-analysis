@@ -1,18 +1,11 @@
 services:
 
-  localstack:
-    image: localstack/localstack:latest
+  floci:
+    image: floci/floci:latest
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=s3,iam,lambda,events
       - AWS_DEFAULT_REGION=eu-west-3
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - LOCALSTACK_HOST=localstack
-    volumes:
-      - ./localstack/init-scripts:/etc/localstack/init/ready.d
-      - localstack-data:/var/lib/localstack
     networks:
       - f1-network
     healthcheck:
@@ -21,15 +14,32 @@ services:
       timeout: 5s
       retries: 5
 
+  floci-init:
+    image: amazon/aws-cli:latest
+    depends_on:
+      floci:
+        condition: service_healthy
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=eu-west-3
+    entrypoint: >
+      /bin/sh -c "
+      aws --endpoint-url=http://floci:4566 s3 mb s3://ezu-f1-data --region eu-west-3 || true &&
+      echo 'Bucket ezu-f1-data ready.'
+      "
+    networks:
+      - f1-network
+
   airflow:
     build: .
     depends_on:
-      localstack:
+      floci:
         condition: service_healthy
     env_file:
       - config/.env.local
     environment:
-      - S3_ENDPOINT_URL=http://localstack:4566
+      - S3_ENDPOINT_URL=http://floci:4566
       - DBT_TARGET=local
       - DBT_PROFILES_DIR=/app/local/dbt
     ports:
@@ -37,14 +47,10 @@ services:
     volumes:
       - ./dbt_projects:/app/dbt_projects
       - ./local/dbt:/app/local/dbt
-      - duckdb-data:/app/duckdb
+      - ./local/duckdb:/app/duckdb
     networks:
       - f1-network
 
 networks:
   f1-network:
     driver: bridge
-
-volumes:
-  localstack-data:
-  duckdb-data:
