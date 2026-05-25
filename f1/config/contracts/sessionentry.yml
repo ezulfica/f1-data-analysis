@@ -1,0 +1,15 @@
+columns:
+  - id
+  - api_id
+  - detail
+  - fastest_lap_rank
+  - grid
+  - is_classified
+  - is_eligible_for_points
+  - laps_completed
+  - points
+  - position
+  - round_entry_id
+  - session_id
+  - status
+  - time

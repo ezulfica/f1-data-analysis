@@ -1,0 +1,11 @@
+columns:
+  - id
+  - api_id
+  - driver_best_results
+  - driver_season_split
+  - eligibility
+  - name
+  - reference
+  - team_best_results
+  - team_points_per_session
+  - team_season_split

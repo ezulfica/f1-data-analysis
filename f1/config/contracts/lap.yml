@@ -1,0 +1,10 @@
+columns:
+  - id
+  - api_id
+  - average_speed
+  - is_deleted
+  - is_entry_fastest_lap
+  - number
+  - position
+  - session_entry_id
+  - time

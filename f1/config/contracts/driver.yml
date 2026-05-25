@@ -1,0 +1,12 @@
+columns:
+  - id
+  - api_id
+  - abbreviation
+  - country_code
+  - date_of_birth
+  - forename
+  - nationality
+  - permanent_car_number
+  - reference
+  - surname
+  - wikipedia

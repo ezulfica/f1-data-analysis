@@ -1,0 +1,9 @@
+columns:
+  - id
+  - api_id
+  - country_code
+  - name
+  - nationality
+  - primary_color
+  - reference
+  - wikipedia

@@ -1,0 +1,11 @@
+jolpica:
+  metadata_url: https://api.jolpi.ca/data/dumps/download/
+  timeout_metadata: 10
+  timeout_download: 120
+
+dlt:
+  pipeline_name: f1_jolpica
+  dataset_name: f1_raw
+  schema_length: 10000
+  write_disposition: merge
+  primary_key: id

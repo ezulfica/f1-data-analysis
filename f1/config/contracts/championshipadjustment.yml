@@ -1,0 +1,8 @@
+columns:
+  - id
+  - adjustment
+  - api_id
+  - driver_id
+  - season_id
+  - team_id
+  - points

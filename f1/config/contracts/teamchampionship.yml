@@ -1,0 +1,15 @@
+columns:
+  - id
+  - adjustment_type
+  - highest_finish
+  - is_eligible
+  - points
+  - position
+  - round_id
+  - round_number
+  - season_id
+  - session_id
+  - session_number
+  - team_id
+  - win_count
+  - year

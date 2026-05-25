@@ -1,0 +1,32 @@
+name: 'f1_data_transformation'
+version: '1.0.0'
+
+profile: 'f1_data_transformation'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  f1_data_transformation:
+    f1:
+      +tags: ["f1"]
+      staging:
+        +materialized: view
+      intermediate:
+        +materialized: view
+      marts:
+        +materialized: table
+
+seeds:
+  f1_data_transformation:
+    +schema: seed_data
+    +enabled: true

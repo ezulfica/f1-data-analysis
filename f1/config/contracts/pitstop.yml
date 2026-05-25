@@ -1,0 +1,8 @@
+columns:
+  - id
+  - api_id
+  - duration
+  - lap_id
+  - local_timestamp
+  - number
+  - session_entry_id

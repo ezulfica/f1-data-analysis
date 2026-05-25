@@ -1,0 +1,19 @@
+f1_data_transformation:
+  target: local
+  outputs:
+    local:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', 'f1_jolpica.duckdb') }}"
+      threads: 4
+    dev:
+      type: duckdb
+      path: "md:f1_data_dev"
+      threads: 4
+    prod:
+      type: duckdb
+      path: "md:f1_data_prod"
+      threads: 4
+    ci:
+      type: duckdb
+      path: ":memory:"
+      threads: 4

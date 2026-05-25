@@ -1,0 +1,6 @@
+columns:
+  - id
+  - api_id
+  - championship_system_id
+  - wikipedia
+  - year

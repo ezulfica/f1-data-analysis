@@ -1,0 +1,11 @@
+columns:
+  - id
+  - api_id
+  - circuit_id
+  - date
+  - is_cancelled
+  - name
+  - number
+  - race_number
+  - season_id
+  - wikipedia

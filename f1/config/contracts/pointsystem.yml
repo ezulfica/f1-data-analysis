@@ -1,0 +1,12 @@
+columns:
+  - id
+  - api_id
+  - driver_fastest_lap
+  - driver_position_points
+  - is_double_points
+  - name
+  - partial
+  - reference
+  - shared_drive
+  - team_fastest_lap
+  - team_position_points

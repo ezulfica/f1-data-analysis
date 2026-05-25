@@ -1,0 +1,7 @@
+columns:
+  - id
+  - api_id
+  - driver_id
+  - role
+  - season_id
+  - team_id

@@ -1,0 +1,12 @@
+columns:
+  - id
+  - altitude
+  - api_id
+  - country
+  - country_code
+  - latitude
+  - locality
+  - longitude
+  - name
+  - reference
+  - wikipedia
