@@ -1,32 +1,30 @@
 DBT_TARGET ?= local
 
-# Pipeline steps (run individually without Airflow)
-ingest:
-	python -m data_ingestion.main
-
-prep:
-	python -m data_prep.main
-
-load:
-	python -m data_load_into_bigquery.main
-
-dbt:
-	dbt build --project-dir dbt_projects --target $(DBT_TARGET)
-
-pipeline: ingest prep load dbt
-
-# Docker Compose stack
+# Infrastructure locale
 up:
-	docker-compose up --build -d
+	docker compose up -d
 
 down:
-	docker-compose down
+	docker compose down
 
-logs:
-	docker-compose logs -f
+# Pipeline F1
+ingest:
+	cd f1 && uv run python -m ingestion.main
 
-# Shortcuts
-s3-status:
-	curl -s http://localhost:4566/_localstack/health | python3 -m json.tool
+dbt:
+	uv run dbt build \
+		--project-dir transform \
+		--profiles-dir transform \
+		--target $(DBT_TARGET)
 
-.PHONY: ingest prep load dbt pipeline up down logs s3-status
+pipeline: ingest dbt
+
+# Qualité
+test:
+	.venv/bin/python -m pytest tests/ -v
+
+lint:
+	.venv/bin/python -m ruff check .
+	.venv/bin/python -m ruff format --check .
+
+.PHONY: up down ingest dbt pipeline test lint

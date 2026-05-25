@@ -1,0 +1,28 @@
+name: F1 Ingestion CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'f1/ingestion/**'
+      - 'f1/config/settings.yaml'
+      - 'f1/config/contracts/**'
+      - 'tests/f1/**'
+
+jobs:
+  ingestion-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest tests/f1/ -v

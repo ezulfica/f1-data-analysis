@@ -1,0 +1,58 @@
+name: dbt Slim CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'transform/**'
+
+jobs:
+  dbt-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Restore dbt state (manifest from last main run)
+        uses: actions/cache/restore@v4
+        with:
+          path: state/
+          key: dbt-manifest-main
+
+      - name: dbt build — full (main branch)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          uv run dbt build \
+            --target ci \
+            --profiles-dir transform \
+            --project-dir transform \
+            --empty
+          mkdir -p state
+          cp transform/target/manifest.json state/
+
+      - name: dbt build — slim (PR, modified models only)
+        if: github.event_name == 'pull_request'
+        run: |
+          uv run dbt build \
+            --target ci \
+            --profiles-dir transform \
+            --project-dir transform \
+            --select state:modified+ \
+            --state ./state/ \
+            --defer \
+            --empty
+
+      - name: Save dbt state (main branch only)
+        if: github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v4
+        with:
+          path: state/
+          key: dbt-manifest-main
